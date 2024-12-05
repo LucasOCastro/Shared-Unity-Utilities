@@ -22,8 +22,8 @@ namespace Shared.Editor
             Assets.ImportAsset("Toaster Head/Editor ExtensionsUtilities", 
                 "Better Hierarchy.unitypackage");
             
-            Assets.ImportAsset("v0lt/ScriptingGUI", 
-                "EditorAttributes.unitypackage");
+            /*Assets.ImportAsset("v0lt/ScriptingGUI", 
+                "EditorAttributes.unitypackage");*/
         }
         
         [MenuItem("Tools/Setup/Install Essential Packages")]
@@ -31,7 +31,9 @@ namespace Shared.Editor
         {
             Packages.InstallPackages(new[]
             {
-                "git+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask"
+                "git+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+                "git+https://github.com/adammyhre/Unity-Utils.git",
+                "git+https://github.com/arimger/Unity-Editor-Toolbox.git#upm"
             });
         }
         
