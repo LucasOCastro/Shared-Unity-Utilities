@@ -2,10 +2,10 @@
 using UnityEditor;
 using System;
 using System.Collections.Generic;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using UnityEditor.PackageManager;
 
-namespace Shared.Editor
+namespace Setup.Editor
 {
     public static class AutomatedProjectSetup
     {
@@ -74,25 +74,28 @@ namespace Shared.Editor
         
         private static class Packages
         {
-            private static async UniTask InstallPackagesAsync(Queue<string> packagesToInstall)
+            private static async Task InstallPackagesAsync(Queue<string> packagesToInstall)
             {
                 while (packagesToInstall.Count > 0)
                 {
                     var request = Client.Add(packagesToInstall.Dequeue());
-                    await UniTask.WaitUntil(() => request.IsCompleted);
+                    while (!request.IsCompleted)
+                        await Task.Delay(1000);
 
                     if (request.Status == StatusCode.Success)
                         Debug.Log("Installed: " + request.Result.packageId);
                     else if (request.Status >= StatusCode.Failure) 
                         Debug.LogError(request.Error.message);
                     
-                    await UniTask.Delay(1000);
+                    await Task.Delay(1000);
                 }
+                
+                Debug.Log($"Finished installing packages.");
             }
 
             public static void InstallPackages(string[] packages)
             {
-                InstallPackagesAsync(new(packages)).Forget();
+                _ = InstallPackagesAsync(new(packages));
             }
         }
         
