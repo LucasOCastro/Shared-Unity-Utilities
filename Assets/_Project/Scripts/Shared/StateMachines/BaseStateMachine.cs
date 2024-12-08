@@ -6,17 +6,28 @@ using Shared.Extensions;
 
 namespace Shared.StateMachines
 {
-    [Serializable]
     public class BaseStateMachine<TState, TTransition> 
-        where TState : IState 
-        where TTransition : class, IBaseTransition<TState>
+        where TState : class, IState 
+        where TTransition : class, ITransition<TState>
     {
         private readonly Dictionary<TState, Node> _nodes = new();
-        private readonly List<TTransition> _anyTransitions = new();
+        private readonly HashSet<TTransition> _anyTransitions = new();
 
         private Node _current;
-        public TState Current => _current.State;
+
+        public TState Current
+        {
+            get
+            {
+                if (_current == null)
+                    throw new InvalidOperationException($"State not set in {GetType().Name}");
+                
+                return _current.State;
+            }
+        }
         
+        
+        public BaseStateMachine() { }
         public BaseStateMachine(TState initialState) => SetState(initialState);
 
         public void Update()
