@@ -1,9 +1,8 @@
-﻿using Shared.StateMachines;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 
-namespace Shared.Editor
+namespace Shared.StateMachines.Editor
 {
     public class StateMachineEditorWindow : EditorWindow
     {
@@ -17,6 +16,7 @@ namespace Shared.Editor
         
         private BaseStateMachineAsset _target;
         private ObjectField _targetField;
+        private StateMachineGraphView _graphView;
         
         
         private void SetTarget(BaseStateMachineAsset target) 
@@ -25,6 +25,8 @@ namespace Shared.Editor
             
             if (_targetField != null && _targetField.value != _target)
                 _targetField.value = _target;
+
+            _graphView?.SetAsset(_target);
         }
 
         private void CreateGUI()
@@ -39,7 +41,7 @@ namespace Shared.Editor
         
         private VisualElement CreateInspector()
         {
-            VisualElement root = new VisualElement();
+            var root = new VisualElement();
             
             _targetField = new()
             {
@@ -54,7 +56,15 @@ namespace Shared.Editor
         
         private VisualElement CreateGraphView()
         {
-            return new();
+            var root = new VisualElement();
+            
+            _graphView = new();
+            root.Add(_graphView);
+            
+            _graphView.StretchToParentSize();
+            _graphView.SetAsset(_target);
+            
+            return root;
         }
     }
 }
