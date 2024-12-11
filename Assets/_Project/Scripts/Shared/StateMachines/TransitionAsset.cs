@@ -7,10 +7,10 @@ namespace Shared.StateMachines
     public class TransitionAsset : ScriptableObject
     {
         [SerializeReference]
-        public IState from;
+        public StateAsset from;
         
         [SerializeReference]
-        public IState to;
+        public StateAsset to;
         
         [SerializeReference]
         public IPredicate condition;
@@ -23,7 +23,8 @@ namespace Shared.StateMachines
             if (constructor == null)
                 throw new ArgumentException($"Type {typeof(TTransition).Name} does not have a constructor that accepts {typeof(TState).Name} and {nameof(IPredicate)}.");
             
-            var toChecked = Preconditions.CheckOfType<IState, TState>(to);
+            Preconditions.CheckOfType<IState, TState>(from.state);
+            var toChecked = Preconditions.CheckOfType<IState, TState>(to.state);
             return (TTransition)constructor.Invoke(new object[] {toChecked, condition});
         }
     }

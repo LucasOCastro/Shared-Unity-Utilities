@@ -1,15 +1,9 @@
 ﻿namespace Shared.StateMachines
 {
-    public class Transition : ITransition<IState>
+    public class Transition : BaseTransition<IState>
     {
-        public IState To { get; }
-        
-        public IPredicate Condition { get; }
-        
-        public Transition(IState to, IPredicate condition)
+        public Transition(IState to, IPredicate condition) : base(to, condition)
         {
-            To = to;
-            Condition = condition;
         }
     }
 }

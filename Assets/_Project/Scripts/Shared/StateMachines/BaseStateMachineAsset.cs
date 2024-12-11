@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Shared.StateMachines
@@ -7,25 +7,28 @@ namespace Shared.StateMachines
     public class BaseStateMachineAsset : ScriptableObject
     {
         [SerializeReference]
-        public IState initialState;
+        public StateAsset initialState;
         
-        [SerializeReference]
-        public IState[] states = Array.Empty<IState>();
+        public List<StateAsset> states = new();
         
-        [SerializeReference]
-        public TransitionAsset[] transitions = Array.Empty<TransitionAsset>();
+        public List<TransitionAsset> transitions = new();
 
         public StateMachine GenericConstruct()
         {
-            var machine = new StateMachine(initialState);
+            var machine = new StateMachine(initialState.state);
             
             foreach (var transition in transitions)
             {
-                machine.AddTransition(transition.from, transition.to, transition.condition);
+                machine.AddTransition(transition.from.state, transition.to.state, transition.condition);
             }
             
-            machine.SetState(initialState);
             return machine;
+        }
+        
+        public void RemoveAndDestroy(StateAsset state)
+        {
+            states.Remove(state);
+            DestroyImmediate(state, true);
         }
     }
 }
