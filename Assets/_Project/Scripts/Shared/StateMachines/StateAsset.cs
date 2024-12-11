@@ -1,23 +1,30 @@
 ﻿using System;
 using UnityEngine;
+using UnityUtils;
 
 namespace Shared.StateMachines
 {
     public class StateAsset : ScriptableObject
     {
         [SerializeReference]
-        public IState state;
+        public IEditableState state;
         
         public Vector2 position;
         
-        public void SetState(IState newState)
+        public void SetState(IEditableState newState)
         {
             state = newState;
             name = state.GetType().Name;
         }
         
-        public void SetState(Type stateType) => SetState(Activator.CreateInstance(stateType) as IState);
+        public void SetState(Type stateType)
+        {
+            if (stateType == null || !stateType.IsDerivedTypeOf(typeof(IEditableState)))
+                throw new ArgumentException($"Type {stateType} must be a subclass of {nameof(IEditableState)}.");
+            
+            SetState((IEditableState)Activator.CreateInstance(stateType));
+        }
         
-        public void SetState<T>() where T : IState => SetState(typeof(T));
+        public void SetState<T>() where T : IEditableState => SetState(typeof(T));
     }
 }
