@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Shared.Extensions;
 using UnityEditor;
@@ -39,7 +40,25 @@ namespace Shared.StateMachines.Editor
             RegisterCallbackOnce<DetachFromPanelEvent>(_ => OnDestroy());
         }
 
-#region SETUP
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            var result = new List<Port>();
+            
+            foreach (var port in ports)
+            {
+                if(port.direction == startPort.direction)
+                    continue;
+
+                if(startPort.connections.Any(e => e.input == port))
+                    continue;
+
+                result.Add(port);
+            }
+
+            return result;
+        }
+
+        #region SETUP
         
         private void SetupBackground()
         {
@@ -97,8 +116,8 @@ namespace Shared.StateMachines.Editor
                     switch (element)
                     {
                         case StateNodeView node:
-                            _nodes.Remove(node.State);
-                            Asset.RemoveAndDestroy(node.State);
+                            _nodes.Remove(node.Asset);
+                            Asset.RemoveAndDestroy(node.Asset);
                             break;
                     }
                 }
@@ -132,7 +151,7 @@ namespace Shared.StateMachines.Editor
                 AssetDatabase.SaveAssets();
             }
             
-            node = new();
+            node = new(this);
             node.SetState(state);
             node.SetPosition(new(state.position, _nodeSize));
             AddElement(node);
@@ -162,11 +181,11 @@ namespace Shared.StateMachines.Editor
             
             Types = MachineTypeInfo.From(asset.GetType());
             
-            foreach (var state in asset.states)
-                GetOrAddState(state);
-
             if (Asset.initialState)
                 GetOrAddState(Asset.initialState);
+            
+            foreach (var state in asset.states)
+                GetOrAddState(state);
         }
         
         public void OpenSearchWindow(Vector2 position)
@@ -181,5 +200,9 @@ namespace Shared.StateMachines.Editor
             Vector2 localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
             return localMousePosition;
         }
+
+        [CanBeNull]
+        public StateNodeView GetNodeAt(Vector2 pos) =>
+            _nodes.Values.FirstOrDefault(n => n.worldBound.Contains(pos));
     }
 }
