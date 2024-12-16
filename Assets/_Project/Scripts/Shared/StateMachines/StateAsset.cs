@@ -7,11 +7,11 @@ namespace Shared.StateMachines
     public class StateAsset : ScriptableObject
     {
         [SerializeReference]
-        public IEditableState state;
+        public IState state;
         
         public Vector2 position;
         
-        public void SetState(IEditableState newState)
+        public void SetState(IState newState)
         {
             state = newState;
             name = state.GetType().Name;
@@ -19,12 +19,12 @@ namespace Shared.StateMachines
         
         public void SetState(Type stateType)
         {
-            if (stateType == null || !stateType.IsDerivedTypeOf(typeof(IEditableState)))
-                throw new ArgumentException($"Type {stateType} must be a subclass of {nameof(IEditableState)}.");
+            if (stateType == null || !stateType.IsDerivedTypeOf(typeof(IState)))
+                throw new ArgumentException($"Type {stateType} must be a subclass of {nameof(IState)}.");
             
-            SetState((IEditableState)Activator.CreateInstance(stateType));
+            SetState((IState)Activator.CreateInstance(stateType));
         }
         
-        public void SetState<T>() where T : IEditableState => SetState(typeof(T));
+        public void SetState<T>() where T : IState => SetState(typeof(T));
     }
 }

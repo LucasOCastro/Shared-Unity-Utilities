@@ -36,7 +36,7 @@ namespace Shared.StateMachines.Editor
                     return new()
                     {
                         MachineType = typeof(StateMachine),
-                        StateType = typeof(IEditableState),
+                        StateType = typeof(IState),
                         TransitionType = typeof(Transition)
                     };
                 }

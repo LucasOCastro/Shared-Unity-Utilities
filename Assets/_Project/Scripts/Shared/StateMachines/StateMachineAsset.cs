@@ -2,7 +2,7 @@
 {
     public abstract class StateMachineAsset<TMachine, TState, TTransition> : BaseStateMachineAsset
         where TMachine : BaseStateMachine<TState, TTransition>, new()
-        where TState : class, IEditableState
+        where TState : class, IState
         where TTransition : class, ITransition<TState>
     {
         public TMachine Construct()
