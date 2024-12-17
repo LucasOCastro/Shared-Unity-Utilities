@@ -17,14 +17,14 @@ namespace Shared.StateMachines.Editor
         public float RootBorderWidth = 2f;
         public Color RootBorderColor = Color.yellow;
 
-        private bool _isInitial;
+        private bool _isRoot;
 
-        public bool IsInitial
+        public bool IsRoot
         {
-            get => _isInitial;
+            get => _isRoot;
             set
             {
-                _isInitial = value;
+                _isRoot = value;
                 if (value)
                 {
                     style.SetBorder(RootBorderWidth, RootBorderColor);
@@ -80,6 +80,10 @@ namespace Shared.StateMachines.Editor
             base.BuildContextualMenu(evt);
 
             evt.menu.AppendAction("Add transition", _ => BeginDragEdge());
+            evt.menu.AppendAction("Make root", _ => GraphView.SetRoot(Asset),
+                IsRoot ? DropdownMenuAction.Status.Disabled : DropdownMenuAction.Status.Normal);
+
+            evt.menu.AppendSeparator();
         }
 
         private void BeginDragEdge()

@@ -8,7 +8,10 @@ namespace Shared.StateMachines.Editor
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            using (new EditorGUI.DisabledScope(true))
+            {
+                base.OnInspectorGUI();
+            }
             
             if (target is not BaseStateMachineAsset asset)
                 return;

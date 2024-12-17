@@ -21,7 +21,7 @@ namespace Shared.StateMachines.Editor
         public MachineTypeInfo Types { get; private set; }
         
         [CanBeNull] 
-        private StateNodeView InitialNode => Asset.initialState != null ? _nodes.GetOrAdd(Asset.initialState) : null;
+        private StateNodeView RootNode => Asset.initialState != null ? GetOrAddState(Asset.initialState) : null;
         
         private readonly Dictionary<StateAsset, StateNodeView> _nodes = new();
         private readonly StateMachineSearchWindowProvider _searchWindowProvider;
@@ -57,8 +57,25 @@ namespace Shared.StateMachines.Editor
 
             return result;
         }
+        
+        public void SetRoot(StateAsset state)
+        {
+            if (RootNode != null)
+            {
+                RootNode.IsRoot = false;
+                Asset.initialState = null;
+            }
 
-        #region SETUP
+            if (state != null)
+            {
+                // Set initial state before adding node to avoid infinite recursion
+                Asset.initialState = state;
+                var node = GetOrAddState(state);
+                node.IsRoot = true;
+            }
+        }
+
+#region SETUP
         
         private void SetupBackground()
         {
@@ -110,7 +127,7 @@ namespace Shared.StateMachines.Editor
         {
             if (change.elementsToRemove != null)
             {
-                change.elementsToRemove.Remove(InitialNode);
+                change.elementsToRemove.Remove(RootNode);
                 foreach (var element in change.elementsToRemove)
                 {
                     switch (element)
@@ -140,11 +157,11 @@ namespace Shared.StateMachines.Editor
                 Asset.states.Add(state);
             
             if (!Asset.initialState)
-                Asset.initialState = state;
+                SetRoot(state);
             
             if (_nodes.TryGetValue(state, out var node))
                 return node;
-
+            
             if (!AssetDatabase.IsSubAsset(state))
             {
                 AssetDatabase.AddObjectToAsset(state, Asset);
@@ -158,7 +175,7 @@ namespace Shared.StateMachines.Editor
             
             _nodes.Add(state, node);
             
-            node.IsInitial = state == Asset.initialState;
+            node.IsRoot = state == Asset.initialState;
             
             return node;
         }
