@@ -1,4 +1,5 @@
 ﻿using System;
+using JetBrains.Annotations;
 using Shared.Extensions;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -8,9 +9,14 @@ namespace Shared.StateMachines.Editor
 {
     public class ArrowEdge : Edge
     {
+        public TransitionAsset Asset { get; private set; }
+        
         public float ArrowHeight = 15f;
         public float ArrowBase = 10f;
-        
+
+        [CanBeNull] public StateNodeView InputNode => (input as StateTransitionPort)?.Node;
+        [CanBeNull] public StateNodeView OutputNode => (output as StateTransitionPort)?.Node;
+
         public StateMachineGraphView GraphView
         {
             get
@@ -22,11 +28,17 @@ namespace Shared.StateMachines.Editor
                 return ((StateTransitionPort)port).GraphView;
             }
         }
-        
+
         public ArrowEdge()
         {
             edgeControl.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             edgeControl.generateVisualContent += DrawArrow;
+        }
+
+        public void SetAsset(TransitionAsset asset)
+        {
+            Asset = asset;
+            MarkDirtyRepaint();
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
@@ -35,14 +47,14 @@ namespace Shared.StateMachines.Editor
             Vector2 dir = (PointsAndTangents[3] - PointsAndTangents[0]).normalized;
             PointsAndTangents[0] = OffsetToEdge(PointsAndTangents[0], dir);
             PointsAndTangents[3] = OffsetToEdge(PointsAndTangents[3], -dir);
-            
+
             //Offset for arrow
             PointsAndTangents[3] -= dir * ArrowHeight;
-            
+
             // Make straight
             PointsAndTangents[1] = PointsAndTangents[0];
             PointsAndTangents[2] = PointsAndTangents[3];
-            
+
             // Disable the round caps
             edgeControl.drawToCap = edgeControl.drawFromCap = false;
         }
@@ -54,14 +66,14 @@ namespace Shared.StateMachines.Editor
             painter.strokeColor = painter.fillColor = edgeControl.toCapColor;
             painter.lineWidth = edgeControl.edgeWidth;
 
-            Vector2 basePoint = edgeControl.parent.ChangeCoordinatesTo(edgeControl, PointsAndTangents[3]); 
+            Vector2 basePoint = edgeControl.parent.ChangeCoordinatesTo(edgeControl, PointsAndTangents[3]);
             Vector2 dir = (PointsAndTangents[3] - PointsAndTangents[0]).normalized;
             Vector2 tip = basePoint + dir * ArrowHeight;
 
             Vector2 baseDir = Vector2.Perpendicular(dir);
             Vector2 a = basePoint + baseDir * ArrowBase * .5f;
             Vector2 b = basePoint - baseDir * ArrowBase * .5f;
-            
+
             painter.BeginPath();
             painter.MoveTo(tip);
             painter.LineTo(a);
@@ -76,14 +88,14 @@ namespace Shared.StateMachines.Editor
             var node = GraphView.GetNodeAt(viewPos);
             if (node == null)
                 return localPos;
-            
+
             var ray = new Ray2D(viewPos, dir);
             var bound = node.worldBound;
-            
+
             float intersection = ray.Intersection(bound);
-            
-            return float.IsNaN(intersection) 
-                ? localPos 
+
+            return float.IsNaN(intersection)
+                ? localPos
                 : this.WorldToLocal(ray.GetPoint(intersection));
         }
     }

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
-using Shared.Extensions;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -24,6 +25,7 @@ namespace Shared.StateMachines.Editor
         private StateNodeView RootNode => Asset.initialState != null ? GetOrAddState(Asset.initialState) : null;
         
         private readonly Dictionary<StateAsset, StateNodeView> _nodes = new();
+        private readonly Dictionary<TransitionAsset, ArrowEdge> _edges = new();
         private readonly StateMachineSearchWindowProvider _searchWindowProvider;
         
         public StateMachineGraphView()
@@ -159,14 +161,14 @@ namespace Shared.StateMachines.Editor
             if (!Asset.initialState)
                 SetRoot(state);
             
-            if (_nodes.TryGetValue(state, out var node))
-                return node;
-            
             if (!AssetDatabase.IsSubAsset(state))
             {
                 AssetDatabase.AddObjectToAsset(state, Asset);
                 AssetDatabase.SaveAssets();
             }
+            
+            if (_nodes.TryGetValue(state, out var node))
+                return node;
             
             node = new(this);
             node.SetState(state);
@@ -180,6 +182,46 @@ namespace Shared.StateMachines.Editor
             return node;
         }
 
+        public ArrowEdge GetOrAddEdge(TransitionAsset transition)
+        {
+            if (!Asset.transitions.Contains(transition))
+                Asset.transitions.Add(transition);
+            
+            if (!AssetDatabase.IsSubAsset(transition))
+            {
+                AssetDatabase.AddObjectToAsset(transition, Asset);
+                AssetDatabase.SaveAssets();
+            }
+            
+            if (_edges.TryGetValue(transition, out var edge))
+                return edge;
+            
+            var fromNode = GetOrAddState(transition.from);
+            var toNode = GetOrAddState(transition.to);
+            
+            edge = new()
+            {
+                output = fromNode.OutputPort,
+                input = toNode.InputPort
+            };
+            edge.SetAsset(transition);
+            AddElement(edge);
+            
+            _edges.Add(transition, edge);
+            
+            return edge;
+        }
+        
+        public void Connect(StateAsset from, StateAsset to)
+        {
+            Debug.Log($"Will connect {from} to {to}");
+            var transition = ScriptableObject.CreateInstance<TransitionAsset>();
+            transition.from = from;
+            transition.to = to;
+            
+            GetOrAddEdge(transition);
+        }
+
         /// <summary>
         /// Sets the state machine asset for the graph view, clearing existing nodes and adding new ones.
         /// Initializes nodes for each state in the asset and sets the initial state node if defined.
@@ -188,6 +230,7 @@ namespace Shared.StateMachines.Editor
         {
             graphElements.ForEach(RemoveElement);
             _nodes.Clear();
+            _edges.Clear();
             
             Asset = asset;
             if (!asset)
@@ -203,12 +246,32 @@ namespace Shared.StateMachines.Editor
             
             foreach (var state in asset.states)
                 GetOrAddState(state);
+
+            foreach (var transition in asset.transitions)
+                GetOrAddEdge(transition);
         }
         
-        public void OpenSearchWindow(Vector2 position)
+        public void OpenSearchWindow(Vector2 position, [CanBeNull] Action<StateAsset> onStateCreated = null)
         {
             var context = new SearchWindowContext(position);
             SearchWindow.Open(context, _searchWindowProvider);
+            
+            if (onStateCreated != null)
+            {
+                _searchWindowProvider.OnStateAssetCreated += onStateCreated;
+                WaitForWindowClose()
+                    .ContinueWith(() => _searchWindowProvider.OnStateAssetCreated -= onStateCreated)
+                    .Forget();
+            }
+            
+            return;
+
+            async UniTask WaitForWindowClose()
+            {
+                EditorWindow window = null;
+                await UniTask.WaitUntil(() => window = EditorWindow.GetWindow<SearchWindow>());
+                await UniTask.WaitUntil(() => !window || !window.hasFocus);
+            }
         }
         
         private Vector2 GetLocalMousePosition(Vector2 mousePosition)

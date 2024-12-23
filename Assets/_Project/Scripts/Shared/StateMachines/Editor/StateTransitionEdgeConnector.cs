@@ -9,11 +9,12 @@ namespace Shared.StateMachines.Editor
 {
     public class StateTransitionEdgeConnector : EdgeConnector<ArrowEdge>
     {
-        private readonly StateMachineGraphView _graphView;
+        private readonly StateTransitionPort _port;
+        public StateMachineGraphView GraphView => _port.GraphView;
         
-        public StateTransitionEdgeConnector(StateMachineGraphView graphView) : base(new TransitionConnectorListener(graphView))
+        public StateTransitionEdgeConnector(StateTransitionPort port) : base(new TransitionConnectorListener(port.GraphView))
         {
-            _graphView = graphView;
+            _port = port;
         }
 
         protected override void OnMouseUp(MouseUpEvent e)
@@ -40,7 +41,7 @@ namespace Shared.StateMachines.Editor
             if (edge == null)
                 return;
             
-            Port port = GetPortAt(ev.mousePosition, _graphView, edge);
+            Port port = GetPortAt(ev.mousePosition, GraphView, edge);
             if (port == null)
                 return;
             
