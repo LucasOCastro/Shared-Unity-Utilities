@@ -32,5 +32,7 @@ namespace Shared.Extensions
             style.SetBorderWidth(width);
             style.SetBorderColor(color);
         }
+        
+        public static void ClearBorder(this IStyle style) => style.SetBorder(0, Color.clear);
     }
 }

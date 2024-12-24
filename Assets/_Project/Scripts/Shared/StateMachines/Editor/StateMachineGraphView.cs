@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
+using Shared.Extensions;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -19,7 +20,10 @@ namespace Shared.StateMachines.Editor
         private readonly Vector2 _nodeSize = new(200, 150);
         
         public BaseStateMachineAsset Asset { get; private set; }
+        
         public MachineTypeInfo Types { get; private set; }
+
+        private AnyNodeView _anyNode;
         
         [CanBeNull] 
         private StateNodeView RootNode => Asset.initialState != null ? GetOrAddState(Asset.initialState) : null;
@@ -37,6 +41,8 @@ namespace Shared.StateMachines.Editor
             SetupStyles();
             SetupManipulators();
             _searchWindowProvider = SetupSearchWindow();
+            
+            _anyNode = CreateAnyNode();
             
             //TODO if this is reused without instantiating a new one it will cause issues
             RegisterCallbackOnce<DetachFromPanelEvent>(_ => OnDestroy());
@@ -112,6 +118,14 @@ namespace Shared.StateMachines.Editor
             };
             return provider;
         }
+
+        private AnyNodeView CreateAnyNode()
+        {
+            var node = new AnyNodeView(this);
+            AddElement(node);
+            node.SetPosition(new(Vector2.zero, _nodeSize));
+            return node;
+        }
         
 #endregion
 
@@ -148,10 +162,10 @@ namespace Shared.StateMachines.Editor
 #endregion
         
         /// <summary>
-        /// Gets or adds a <see cref="StateNodeView"/> for the given <paramref name="state"/>.
+        /// Gets or adds a <see cref="BaseNodeView"/> for the given <paramref name="state"/>.
         /// If the state is not already in the dictionary, adds it to the graph view and the asset's states.
         /// If the asset's initial state is not set, sets the given state as the initial state.
-        /// Returns the <see cref="StateNodeView"/> for the given <paramref name="state"/>.
+        /// Returns the <see cref="BaseNodeView"/> for the given <paramref name="state"/>.
         /// </summary>
         private StateNodeView GetOrAddState(StateAsset state)
         {
@@ -196,7 +210,7 @@ namespace Shared.StateMachines.Editor
             if (_edges.TryGetValue(transition, out var edge))
                 return edge;
             
-            var fromNode = GetOrAddState(transition.from);
+            BaseNodeView fromNode = transition.from ? GetOrAddState(transition.from) : _anyNode;
             var toNode = GetOrAddState(transition.to);
             
             edge = new()
@@ -208,13 +222,14 @@ namespace Shared.StateMachines.Editor
             AddElement(edge);
             
             _edges.Add(transition, edge);
+
+            _anyNode.SetPosition(new(_anyNode.GetPosition()) { position = Asset.anyNodePosition });
             
             return edge;
         }
         
         public void Connect(StateAsset from, StateAsset to)
         {
-            Debug.Log($"Will connect {from} to {to}");
             var transition = ScriptableObject.CreateInstance<TransitionAsset>();
             transition.from = from;
             transition.to = to;
@@ -228,7 +243,7 @@ namespace Shared.StateMachines.Editor
         /// </summary>
         public void SetAsset(BaseStateMachineAsset asset)
         {
-            graphElements.ForEach(RemoveElement);
+            graphElements.Except(_anyNode).ForEach(RemoveElement);
             _nodes.Clear();
             _edges.Clear();
             
@@ -282,7 +297,17 @@ namespace Shared.StateMachines.Editor
         }
 
         [CanBeNull]
-        public StateNodeView GetNodeAt(Vector2 pos) =>
-            _nodes.Values.FirstOrDefault(n => n.worldBound.Contains(pos));
+        public BaseNodeView GetNodeAt(Vector2 pos)
+        {
+            var node = _nodes.Values.FirstOrDefault(n => n.worldBound.Contains(pos));
+            if (node != null)
+                return node;
+
+            if (_anyNode.worldBound.Contains(pos))
+                return _anyNode;
+            
+            return null;
+        }
+            
     }
 }

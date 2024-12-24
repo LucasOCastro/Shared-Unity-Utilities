@@ -15,24 +15,22 @@ namespace Shared.StateMachines.Editor
         public void OnDropOutsidePort(Edge edge, Vector2 position)
         {
             var transition = (ArrowEdge)edge;
-            var from = transition.OutputNode;
-            var to = transition.InputNode;
+            var from = transition.OutputState;
+            var to = transition.InputState;
             _graphView.OpenSearchWindow(position, newState =>
             {
-                Debug.Log($"CREATED {newState} - edge is {transition} from {transition.output} to {transition.input}");
-                if (from != null)
-                    _graphView.Connect(from.Asset, newState);
-
-                if (to != null)
-                    _graphView.Connect(newState, to.Asset);
+                if (to == null)
+                    _graphView.Connect(from, newState);
+                else if (from == null)
+                    _graphView.Connect(newState, to);
             });
         }
 
         public void OnDrop(GraphView graphView, Edge edge)
         {
             var transition = (ArrowEdge)edge;
-            if (transition.InputNode != null && transition.OutputNode != null)
-                _graphView.Connect(transition.OutputNode.Asset, transition.InputNode.Asset);
+            if (transition.InputState != null)
+                _graphView.Connect(transition.OutputState, transition.InputState);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Shared.StateMachines
     [CreateAssetMenu(fileName = "New State Machine", menuName = "StateMachines/State Machine")]
     public class BaseStateMachineAsset : ScriptableObject
     {
+        public Vector2 anyNodePosition;
+        
         public StateAsset initialState;
         
         public List<StateAsset> states = new();
