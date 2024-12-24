@@ -9,15 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cffb42c9d77c40189539a9feca42dd5f, type: 3}
-  m_Name: New State Machine
+  m_Script: {fileID: 11500000, guid: 278d29fab93949719010e4e1864cc14c, type: 3}
+  m_Name: TestStateMachine
   m_EditorClassIdentifier: 
-  initialState:
-    rid: -2
+  initialState: {fileID: 0}
   states: []
   transitions: []
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
