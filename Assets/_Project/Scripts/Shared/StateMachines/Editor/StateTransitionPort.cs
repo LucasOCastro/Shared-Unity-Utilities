@@ -5,7 +5,7 @@ namespace Shared.StateMachines.Editor
 {
     public class StateTransitionPort : Port
     {
-        public StateNodeView Node => (StateNodeView)node;
+        public BaseNodeView Node => (BaseNodeView)node;
         public StateMachineGraphView GraphView { get; }
         
         private StateTransitionPort(Orientation orientation, Direction direction, Capacity capacity, System.Type type, StateMachineGraphView graphView)

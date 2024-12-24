@@ -14,8 +14,12 @@ namespace Shared.StateMachines.Editor
         public float ArrowHeight = 15f;
         public float ArrowBase = 10f;
 
-        [CanBeNull] public StateNodeView InputNode => (input as StateTransitionPort)?.Node;
-        [CanBeNull] public StateNodeView OutputNode => (output as StateTransitionPort)?.Node;
+        [CanBeNull] public BaseNodeView InputNode => (input as StateTransitionPort)?.Node;
+        [CanBeNull] public StateAsset InputState => (InputNode as StateNodeView)?.Asset;
+        
+        [CanBeNull] public BaseNodeView OutputNode => (output as StateTransitionPort)?.Node;
+        [CanBeNull] public StateAsset OutputState => (OutputNode as StateNodeView)?.Asset;
+        
 
         public StateMachineGraphView GraphView
         {
