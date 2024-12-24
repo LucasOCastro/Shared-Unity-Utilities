@@ -21,6 +21,8 @@ namespace Shared.StateMachines.Editor
 
             if (GUILayout.Button("Clear"))
             {
+                asset.anyNodePosition = Vector2.zero;
+                
                 asset.states.ForEach(DestroyAsset);
                 asset.states.Clear();
                 

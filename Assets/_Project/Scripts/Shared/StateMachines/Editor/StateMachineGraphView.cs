@@ -152,6 +152,10 @@ namespace Shared.StateMachines.Editor
                             _nodes.Remove(node.Asset);
                             Asset.RemoveAndDestroy(node.Asset);
                             break;
+                        case ArrowEdge edge:
+                            _edges.Remove(edge.Asset);
+                            Asset.RemoveAndDestroy(edge.Asset);
+                            break;
                     }
                 }
             }

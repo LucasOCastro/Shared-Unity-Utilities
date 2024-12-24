@@ -35,5 +35,11 @@ namespace Shared.StateMachines
             states.Remove(state);
             DestroyImmediate(state, true);
         }
+        
+        public void RemoveAndDestroy(TransitionAsset transition)
+        {
+            transitions.Remove(transition);
+            DestroyImmediate(transition, true);
+        }
     }
 }
