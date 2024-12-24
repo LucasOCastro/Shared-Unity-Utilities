@@ -8,7 +8,7 @@ namespace Shared
     // https://gist.github.com/adammyhre/82d495ab99e2c59a19362119b2d43194
     public static class Preconditions
     {
-        public static T CheckOfType<TValue, T>(TValue value)
+        public static T CheckOfType<T>(object value)
         {
             if (value is not T result)
             {

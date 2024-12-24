@@ -6,7 +6,6 @@ namespace Shared.StateMachines
     [CreateAssetMenu(fileName = "New State Machine", menuName = "StateMachines/State Machine")]
     public class BaseStateMachineAsset : ScriptableObject
     {
-        [SerializeReference]
         public StateAsset initialState;
         
         public List<StateAsset> states = new();
@@ -19,7 +18,11 @@ namespace Shared.StateMachines
             
             foreach (var transition in transitions)
             {
-                machine.AddTransition(transition.from.state, transition.to.state, transition.condition);
+                var checkedTransition = Preconditions.CheckOfType<Transition>(transition.transition);
+                if (transition.from)
+                    machine.AddTransition(transition.from.state, checkedTransition);
+                else
+                    machine.AddAnyTransition(checkedTransition);
             }
             
             return machine;

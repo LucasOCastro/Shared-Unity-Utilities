@@ -11,12 +11,14 @@
             
             foreach (var transition in transitions)
             {
-                TState from = Preconditions.CheckOfType<IState, TState>(transition.from.state);
                 TTransition t = transition.ToTransition<TTransition, TState>();
-                machine.AddTransition(from, t);
+                if (transition.from)
+                    machine.AddTransition(Preconditions.CheckOfType<TState>(transition.from.state), t);
+                else
+                    machine.AddAnyTransition(t);
             }
             
-            TState state = Preconditions.CheckOfType<IState, TState>(initialState.state);
+            TState state = Preconditions.CheckOfType<TState>(initialState.state);
             machine.SetState(state);
             
             return machine;
