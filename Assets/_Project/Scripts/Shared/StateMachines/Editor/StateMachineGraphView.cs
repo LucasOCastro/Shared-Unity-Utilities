@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
-using Shared.Extensions;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityUtils;
 using Object = UnityEngine.Object;
 
 namespace Shared.StateMachines.Editor
@@ -243,7 +243,7 @@ namespace Shared.StateMachines.Editor
         /// </summary>
         public void SetAsset(BaseStateMachineAsset asset)
         {
-            graphElements.Except(_anyNode).ForEach(RemoveElement);
+            graphElements.Where(x => x != _anyNode).ForEach(RemoveElement);
             _nodes.Clear();
             _edges.Clear();
             
