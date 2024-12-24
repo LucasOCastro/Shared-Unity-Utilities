@@ -67,7 +67,7 @@ namespace Shared.StateMachines.Editor
         {
             var painter = meshGenerationContext.painter2D;
 
-            painter.strokeColor = painter.fillColor = edgeControl.toCapColor;
+            painter.strokeColor = painter.fillColor = edgeControl.inputColor;
             painter.lineWidth = edgeControl.edgeWidth;
 
             Vector2 basePoint = edgeControl.parent.ChangeCoordinatesTo(edgeControl, PointsAndTangents[3]);
