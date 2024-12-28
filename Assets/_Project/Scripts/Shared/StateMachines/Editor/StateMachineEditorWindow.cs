@@ -58,7 +58,7 @@ namespace Shared.StateMachines.Editor
         {
             var root = new VisualElement();
             
-            _graphView = new();
+            _graphView = new(this);
             root.Add(_graphView);
             
             _graphView.StretchToParentSize();

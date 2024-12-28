@@ -43,7 +43,7 @@ namespace Shared.StateMachines.Editor
             return root;
         }
         
-        private IEnumerable<SearchTreeEntry> GetSubTree(Node node, int level)
+        private static IEnumerable<SearchTreeEntry> GetSubTree(Node node, int level)
         {
             var entry = node.ToEntry(level);
             if (entry != null)
@@ -78,7 +78,7 @@ namespace Shared.StateMachines.Editor
             
             var stateAsset = CreateInstance<StateAsset>();
             stateAsset.SetState(type);
-            stateAsset.position = context.screenMousePosition;
+            stateAsset.position = GraphView.GetLocalMousePosition(context.screenMousePosition, isScreenPosition: true);
             OnStateAssetCreated?.Invoke(stateAsset);
 
             return true;

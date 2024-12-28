@@ -16,75 +16,77 @@ namespace Shared.StateMachines.Editor
     {
         private const string StylesPath = "Assets/_Project/Scripts/Shared/StateMachines/Editor/Styles/";
         private const string GraphViewStylePath = StylesPath + "GraphViewStyles.uss";
-        
+
         private readonly Vector2 _nodeSize = new(200, 150);
-        
+
+        public StateMachineEditorWindow Window { get; }
+
         public BaseStateMachineAsset Asset { get; private set; }
-        
+
         public MachineTypeInfo Types { get; private set; }
 
-        private AnyNodeView _anyNode;
-        
-        [CanBeNull] 
+        [CanBeNull]
         private StateNodeView RootNode => Asset.initialState != null ? GetOrAddState(Asset.initialState) : null;
         
+        private readonly AnyNodeView _anyNode;
+
         private readonly Dictionary<StateAsset, StateNodeView> _nodes = new();
         private readonly Dictionary<TransitionAsset, ArrowEdge> _edges = new();
         private readonly StateMachineSearchWindowProvider _searchWindowProvider;
-        
-        public StateMachineGraphView()
+
+        #region INITIALIZATION
+
+        public StateMachineGraphView(StateMachineEditorWindow editorWindow)
         {
+            Window = editorWindow;
+
             graphViewChanged = OnGraphViewChanged;
             nodeCreationRequest = context => OpenSearchWindow(context.screenMousePosition);
-            
+
             SetupBackground();
             SetupStyles();
             SetupManipulators();
             _searchWindowProvider = SetupSearchWindow();
-            
+
             _anyNode = CreateAnyNode();
-            
-            //TODO if this is reused without instantiating a new one it will cause issues
+
             RegisterCallbackOnce<DetachFromPanelEvent>(_ => OnDestroy());
         }
 
-        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        /// <summary>
+        /// Sets the state machine asset for the graph view, clearing existing nodes and adding new ones.
+        /// Initializes nodes for each state in the asset and sets the initial state node if defined.
+        /// </summary>
+        public void SetAsset(BaseStateMachineAsset asset)
         {
-            var result = new List<Port>();
-            
-            foreach (var port in ports)
+            graphElements.Where(x => x != _anyNode).ForEach(RemoveElement);
+            _nodes.Clear();
+            _edges.Clear();
+
+            Asset = asset;
+            if (!asset)
             {
-                if(port.direction == startPort.direction)
-                    continue;
-
-                if(startPort.connections.Any(e => e.input == port))
-                    continue;
-
-                result.Add(port);
+                Types = default;
+                return;
             }
 
-            return result;
-        }
-        
-        public void SetRoot(StateAsset state)
-        {
-            if (RootNode != null)
-            {
-                RootNode.IsRoot = false;
-                Asset.initialState = null;
-            }
+            Types = MachineTypeInfo.From(asset.GetType());
 
-            if (state != null)
-            {
-                // Set initial state before adding node to avoid infinite recursion
-                Asset.initialState = state;
-                var node = GetOrAddState(state);
-                node.IsRoot = true;
-            }
+            if (Asset.initialState)
+                GetOrAddState(Asset.initialState);
+
+            foreach (var state in asset.states)
+                GetOrAddState(state);
+
+            foreach (var transition in asset.transitions)
+                GetOrAddEdge(transition);
         }
 
-#region SETUP
-        
+        #endregion
+
+
+        #region SETUP
+
         private void SetupBackground()
         {
             GridBackground gridBackground = new GridBackground();
@@ -126,10 +128,35 @@ namespace Shared.StateMachines.Editor
             node.SetPosition(new(Vector2.zero, _nodeSize));
             return node;
         }
-        
-#endregion
 
-#region CALLBACKS
+        #endregion
+
+
+        #region OVERRIDES
+
+        public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
+        {
+            var result = new List<Port>();
+
+            foreach (var port in ports)
+            {
+                if (port.direction == startPort.direction)
+                    continue;
+
+                if (startPort.connections.Any(e => e.input == port))
+                    continue;
+
+                result.Add(port);
+            }
+
+            return result;
+        }
+
+        #endregion
+
+
+        #region EVENTS
+
         private void OnDestroy()
         {
             Object.DestroyImmediate(_searchWindowProvider);
@@ -159,12 +186,15 @@ namespace Shared.StateMachines.Editor
                     }
                 }
             }
-            
+
             return change;
         }
-        
-#endregion
-        
+
+        #endregion
+
+
+        #region NODES
+
         /// <summary>
         /// Gets or adds a <see cref="BaseNodeView"/> for the given <paramref name="state"/>.
         /// If the state is not already in the dictionary, adds it to the graph view and the asset's states.
@@ -175,48 +205,53 @@ namespace Shared.StateMachines.Editor
         {
             if (!Asset.states.Contains(state))
                 Asset.states.Add(state);
-            
+
             if (!Asset.initialState)
                 SetRoot(state);
-            
+
             if (!AssetDatabase.IsSubAsset(state))
             {
                 AssetDatabase.AddObjectToAsset(state, Asset);
                 AssetDatabase.SaveAssets();
             }
-            
+
             if (_nodes.TryGetValue(state, out var node))
                 return node;
-            
+
             node = new(this);
             node.SetState(state);
             node.SetPosition(new(state.position, _nodeSize));
             AddElement(node);
-            
+
             _nodes.Add(state, node);
-            
+
             node.IsRoot = state == Asset.initialState;
-            
+
             return node;
         }
+
+        #endregion
+
+
+        #region EDGES
 
         public ArrowEdge GetOrAddEdge(TransitionAsset transition)
         {
             if (!Asset.transitions.Contains(transition))
                 Asset.transitions.Add(transition);
-            
+
             if (!AssetDatabase.IsSubAsset(transition))
             {
                 AssetDatabase.AddObjectToAsset(transition, Asset);
                 AssetDatabase.SaveAssets();
             }
-            
+
             if (_edges.TryGetValue(transition, out var edge))
                 return edge;
-            
+
             BaseNodeView fromNode = transition.from ? GetOrAddState(transition.from) : _anyNode;
             var toNode = GetOrAddState(transition.to);
-            
+
             edge = new()
             {
                 output = fromNode.OutputPort,
@@ -224,57 +259,50 @@ namespace Shared.StateMachines.Editor
             };
             edge.SetAsset(transition);
             AddElement(edge);
-            
+
             _edges.Add(transition, edge);
 
             _anyNode.SetPosition(new(_anyNode.GetPosition()) { position = Asset.anyNodePosition });
-            
+
             return edge;
         }
-        
+
         public void Connect(StateAsset from, StateAsset to)
         {
             var transition = ScriptableObject.CreateInstance<TransitionAsset>();
             transition.from = from;
             transition.to = to;
-            
+
             GetOrAddEdge(transition);
         }
 
-        /// <summary>
-        /// Sets the state machine asset for the graph view, clearing existing nodes and adding new ones.
-        /// Initializes nodes for each state in the asset and sets the initial state node if defined.
-        /// </summary>
-        public void SetAsset(BaseStateMachineAsset asset)
+        public void SetRoot(StateAsset state)
         {
-            graphElements.Where(x => x != _anyNode).ForEach(RemoveElement);
-            _nodes.Clear();
-            _edges.Clear();
-            
-            Asset = asset;
-            if (!asset)
+            if (RootNode != null)
             {
-                Types = default;
-                return;
+                RootNode.IsRoot = false;
+                Asset.initialState = null;
             }
-            
-            Types = MachineTypeInfo.From(asset.GetType());
-            
-            if (Asset.initialState)
-                GetOrAddState(Asset.initialState);
-            
-            foreach (var state in asset.states)
-                GetOrAddState(state);
 
-            foreach (var transition in asset.transitions)
-                GetOrAddEdge(transition);
+            if (state != null)
+            {
+                // Set initial state before adding node to avoid infinite recursion
+                Asset.initialState = state;
+                var node = GetOrAddState(state);
+                node.IsRoot = true;
+            }
         }
-        
+
+        #endregion
+
+
+        #region UTILITIES
+
         public void OpenSearchWindow(Vector2 position, [CanBeNull] Action<StateAsset> onStateCreated = null)
         {
             var context = new SearchWindowContext(position);
             SearchWindow.Open(context, _searchWindowProvider);
-            
+
             if (onStateCreated != null)
             {
                 _searchWindowProvider.OnStateAssetCreated += onStateCreated;
@@ -282,7 +310,7 @@ namespace Shared.StateMachines.Editor
                     .ContinueWith(() => _searchWindowProvider.OnStateAssetCreated -= onStateCreated)
                     .Forget();
             }
-            
+
             return;
 
             async UniTask WaitForWindowClose()
@@ -292,10 +320,17 @@ namespace Shared.StateMachines.Editor
                 await UniTask.WaitUntil(() => !window || !window.hasFocus);
             }
         }
-        
-        private Vector2 GetLocalMousePosition(Vector2 mousePosition)
+
+        public Vector2 GetLocalMousePosition(Vector2 mousePosition, bool isScreenPosition = false)
         {
             Vector2 worldMousePosition = mousePosition;
+
+            if (isScreenPosition)
+            {
+                worldMousePosition = Window.rootVisualElement.ChangeCoordinatesTo(Window.rootVisualElement.parent,
+                    mousePosition - Window.position.position);
+            }
+
             Vector2 localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
             return localMousePosition;
         }
@@ -309,9 +344,10 @@ namespace Shared.StateMachines.Editor
 
             if (_anyNode.worldBound.Contains(pos))
                 return _anyNode;
-            
+
             return null;
         }
-            
+
+        #endregion
     }
 }
