@@ -115,7 +115,6 @@ namespace Shared.StateMachines.Editor
             provider.GraphView = this;
             provider.OnStateAssetCreated += newState =>
             {
-                //newState.position = GetLocalMousePosition(newState.position);
                 GetOrAddState(newState);
             };
             return provider;
@@ -326,6 +325,12 @@ namespace Shared.StateMachines.Editor
             Vector2 worldMousePosition = screenMousePosition - Window.position.position;
             Vector2 localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
             return localMousePosition;
+        }
+
+        public Vector2 WorldPositionToScreen(Vector2 worldMousePosition)
+        {
+            Vector2 screenMousePosition = Window.position.position + worldMousePosition;
+            return screenMousePosition;
         }
 
         [CanBeNull]

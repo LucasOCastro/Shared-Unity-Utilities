@@ -14,10 +14,12 @@ namespace Shared.StateMachines.Editor
         
         public void OnDropOutsidePort(Edge edge, Vector2 position)
         {
+            Vector2 screenPosition = _graphView.WorldPositionToScreen(position);
+            
             var transition = (ArrowEdge)edge;
             var from = transition.OutputState;
             var to = transition.InputState;
-            _graphView.OpenSearchWindow(position, newState =>
+            _graphView.OpenSearchWindow(screenPosition, newState =>
             {
                 if (to == null)
                     _graphView.Connect(from, newState);
