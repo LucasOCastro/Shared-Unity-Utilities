@@ -115,7 +115,7 @@ namespace Shared.StateMachines.Editor
             provider.GraphView = this;
             provider.OnStateAssetCreated += newState =>
             {
-                newState.position = GetLocalMousePosition(newState.position);
+                //newState.position = GetLocalMousePosition(newState.position);
                 GetOrAddState(newState);
             };
             return provider;
@@ -321,16 +321,9 @@ namespace Shared.StateMachines.Editor
             }
         }
 
-        public Vector2 GetLocalMousePosition(Vector2 mousePosition, bool isScreenPosition = false)
+        public Vector2 ScreenPositionToLocal(Vector2 screenMousePosition)
         {
-            Vector2 worldMousePosition = mousePosition;
-
-            if (isScreenPosition)
-            {
-                worldMousePosition = Window.rootVisualElement.ChangeCoordinatesTo(Window.rootVisualElement.parent,
-                    mousePosition - Window.position.position);
-            }
-
+            Vector2 worldMousePosition = screenMousePosition - Window.position.position;
             Vector2 localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
             return localMousePosition;
         }

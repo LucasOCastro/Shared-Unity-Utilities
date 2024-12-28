@@ -78,7 +78,7 @@ namespace Shared.StateMachines.Editor
             
             var stateAsset = CreateInstance<StateAsset>();
             stateAsset.SetState(type);
-            stateAsset.position = GraphView.GetLocalMousePosition(context.screenMousePosition, isScreenPosition: true);
+            stateAsset.position = GraphView.ScreenPositionToLocal(context.screenMousePosition);
             OnStateAssetCreated?.Invoke(stateAsset);
 
             return true;
