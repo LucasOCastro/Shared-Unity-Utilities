@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Shared.Extensions;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityUtils;
 
@@ -68,6 +70,19 @@ namespace Shared.StateMachines.Editor
             var result = new List<SearchTreeEntry> {new SearchTreeGroupEntry(new(title))};
             
             result.AddRange(GetSubTree(treeRoot, 1));
+
+            // If there is only one type, automatically select it
+            var single = result.SingleOrDefault(entry => entry.userData is Type { IsAbstract: false });
+            if (single != null)
+            {
+                UniTask.NextFrame().ContinueWith(() =>
+                {
+                    var window = EditorWindow.GetWindow<SearchWindow>();
+                    window.Close();
+                    OnSelectEntry(single, context);
+                });
+            }
+            
             return result;
         }
 
