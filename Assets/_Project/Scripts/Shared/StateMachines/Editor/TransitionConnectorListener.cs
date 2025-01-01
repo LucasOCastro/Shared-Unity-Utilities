@@ -22,9 +22,9 @@ namespace Shared.StateMachines.Editor
             _graphView.OpenSearchWindow(screenPosition, newState =>
             {
                 if (to == null)
-                    _graphView.Connect(from, newState);
+                    _graphView.GetOrAddEdge(from, newState);
                 else if (from == null)
-                    _graphView.Connect(newState, to);
+                    _graphView.GetOrAddEdge(newState, to);
             });
         }
 
@@ -32,7 +32,7 @@ namespace Shared.StateMachines.Editor
         {
             var transition = (ArrowEdge)edge;
             if (transition.InputState != null)
-                _graphView.Connect(transition.OutputState, transition.InputState);
+                _graphView.GetOrAddEdge(transition.OutputState, transition.InputState);
         }
     }
 }

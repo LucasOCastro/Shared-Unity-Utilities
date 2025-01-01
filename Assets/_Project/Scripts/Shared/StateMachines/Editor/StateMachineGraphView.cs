@@ -31,7 +31,7 @@ namespace Shared.StateMachines.Editor
         private readonly AnyNodeView _anyNode;
 
         private readonly Dictionary<StateAsset, StateNodeView> _nodes = new();
-        private readonly Dictionary<TransitionAsset, ArrowEdge> _edges = new();
+        private readonly Dictionary<(StateAsset from, StateAsset to), ArrowEdge> _edges = new();
         private readonly StateMachineSearchWindowProvider _searchWindowProvider;
 
         #region INITIALIZATION
@@ -70,6 +70,8 @@ namespace Shared.StateMachines.Editor
                 return;
             }
 
+            _anyNode.SetPosition(new(Asset.anyNodePosition, _nodeSize));
+            
             Types = MachineTypeInfo.From(asset.GetType());
 
             if (Asset.initialState)
@@ -124,7 +126,6 @@ namespace Shared.StateMachines.Editor
         {
             var node = new AnyNodeView(this);
             AddElement(node);
-            node.SetPosition(new(Vector2.zero, _nodeSize));
             return node;
         }
 
@@ -179,8 +180,9 @@ namespace Shared.StateMachines.Editor
                             Asset.RemoveAndDestroy(node.Asset);
                             break;
                         case ArrowEdge edge:
-                            _edges.Remove(edge.Asset);
-                            Asset.RemoveAndDestroy(edge.Asset);
+                            foreach (var transition in edge.Assets)
+                                Asset.RemoveAndDestroy(transition);
+                            _edges.Remove((edge.OutputState, edge.InputState));
                             break;
                     }
                 }
@@ -234,6 +236,26 @@ namespace Shared.StateMachines.Editor
 
         #region EDGES
 
+        public ArrowEdge GetOrAddEdge(StateAsset from, StateAsset to)
+        {
+            if (_edges.TryGetValue((from, to), out var edge))
+                return edge;
+            
+            BaseNodeView fromNode = from ? GetOrAddState(from) : _anyNode;
+            BaseNodeView toNode = GetOrAddState(to);
+
+            edge = new()
+            {
+                output = fromNode.OutputPort,
+                input = toNode.InputPort
+            };
+            AddElement(edge);
+
+            _edges.Add((from, to), edge);
+
+            return edge;
+        }
+
         public ArrowEdge GetOrAddEdge(TransitionAsset transition)
         {
             if (!Asset.transitions.Contains(transition))
@@ -245,34 +267,11 @@ namespace Shared.StateMachines.Editor
                 AssetDatabase.SaveAssets();
             }
 
-            if (_edges.TryGetValue(transition, out var edge))
-                return edge;
-
-            BaseNodeView fromNode = transition.from ? GetOrAddState(transition.from) : _anyNode;
-            var toNode = GetOrAddState(transition.to);
-
-            edge = new()
-            {
-                output = fromNode.OutputPort,
-                input = toNode.InputPort
-            };
-            edge.SetAsset(transition);
-            AddElement(edge);
-
-            _edges.Add(transition, edge);
-
-            _anyNode.SetPosition(new(_anyNode.GetPosition()) { position = Asset.anyNodePosition });
-
+            var edge = GetOrAddEdge(transition.from, transition.to);
+            if (!edge.Assets.Contains(transition))
+                edge.Assets.Add(transition);
+            
             return edge;
-        }
-
-        public void Connect(StateAsset from, StateAsset to)
-        {
-            var transition = ScriptableObject.CreateInstance<TransitionAsset>();
-            transition.from = from;
-            transition.to = to;
-
-            GetOrAddEdge(transition);
         }
 
         public void SetRoot(StateAsset state)

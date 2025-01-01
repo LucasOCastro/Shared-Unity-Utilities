@@ -14,10 +14,6 @@ namespace Shared.StateMachines.Editor
         public float RootBorderWidth = 2f;
         public Color RootBorderColor = Color.yellow;
         
-        public StateNodeView(StateMachineGraphView graphView) : base(graphView, hasInput: true, hasOutput: true)
-        {
-        }
-        
         private bool _isRoot;
         public bool IsRoot
         {
@@ -38,6 +34,11 @@ namespace Shared.StateMachines.Editor
             }
         }
         
+        public StateNodeView(StateMachineGraphView graphView) : base(graphView, hasInput: true, hasOutput: true)
+        {
+            capabilities |= Capabilities.Renamable;
+        }
+        
         public void SetState(StateAsset state)
         {
             Asset = state;
@@ -49,6 +50,16 @@ namespace Shared.StateMachines.Editor
         {
             base.SetPosition(newPos);
             Asset.position = newPos.position;
+        }
+
+        public override string title
+        {
+            get => base.title;
+            set
+            {
+                base.title = value; 
+                Asset.name = value;
+            }
         }
 
         protected override IEnumerable<(string label, Action action, bool disabled)> GetContextMenuActions()

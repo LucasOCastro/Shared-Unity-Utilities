@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using JetBrains.Annotations;
 using Shared.Extensions;
 using UnityEditor.Experimental.GraphView;
@@ -9,7 +10,7 @@ namespace Shared.StateMachines.Editor
 {
     public class ArrowEdge : Edge
     {
-        public TransitionAsset Asset { get; private set; }
+        public ObservableCollection<TransitionAsset> Assets { get; } = new();
         
         public float ArrowHeight = 15f;
         public float ArrowBase = 10f;
@@ -37,12 +38,8 @@ namespace Shared.StateMachines.Editor
         {
             edgeControl.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
             edgeControl.generateVisualContent += DrawArrow;
-        }
-
-        public void SetAsset(TransitionAsset asset)
-        {
-            Asset = asset;
-            MarkDirtyRepaint();
+            
+            Assets.CollectionChanged += (_, _) => MarkDirtyRepaint();
         }
 
         private void OnGeometryChanged(GeometryChangedEvent evt)
