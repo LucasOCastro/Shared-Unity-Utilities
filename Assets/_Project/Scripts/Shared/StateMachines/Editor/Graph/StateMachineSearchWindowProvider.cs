@@ -6,11 +6,10 @@ using JetBrains.Annotations;
 using Shared.Extensions;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 using UnityUtils;
 
-namespace Shared.StateMachines.Editor
+namespace Shared.StateMachines.Editor.Graph
 {
     public class StateMachineSearchWindowProvider : ScriptableObject, ISearchWindowProvider
     {
