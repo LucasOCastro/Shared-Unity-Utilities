@@ -1,0 +1,19 @@
+{
+  "name": "com.lucascastro.shared-state-machines",
+  "version": "1.0.0",
+  "displayName": "Shared State Machine",
+  "description": "Automatically setups folder hierarchy and imports usual packages and assets.",
+  "dependencies": {
+    "com.unity.editorcoroutines": "1.0.0"
+  },
+  "keywords": [
+    "shared",
+    "state",
+    "machine",
+    "fsm"
+  ],
+  "author": {
+    "name": "Lucas Castro",
+    "email": "lucas.ocastro42@gmail.com"
+  }
+}

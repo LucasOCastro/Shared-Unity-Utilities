@@ -1,0 +1,16 @@
+{
+    "name": "SharedUtilities.StateMachines",
+    "rootNamespace": "SharedUtilities.StateMachines",
+    "references": [
+        "GUID:e340dd2126e52f54eacb32e62b7e1668"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

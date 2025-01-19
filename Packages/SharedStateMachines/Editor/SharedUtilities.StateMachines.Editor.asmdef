@@ -1,0 +1,20 @@
+{
+    "name": "SharedUtilities.StateMachines.Editor",
+    "rootNamespace": "SharedUtilities.StateMachines",
+    "references": [
+        "GUID:c14cfb0b8b1ff6c4f8941765afc67404",
+        "GUID:e340dd2126e52f54eacb32e62b7e1668",
+        "GUID:478a2357cc57436488a56e564b08d223"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

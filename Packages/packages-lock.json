@@ -39,6 +39,28 @@
       "source": "local-tarball",
       "dependencies": {}
     },
+    "com.lucascastro.automated-setup": {
+      "version": "file:Automated Setup",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "com.lucascastro.shared-state-machines": {
+      "version": "file:SharedStateMachines",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.editorcoroutines": "1.0.0"
+      }
+    },
+    "com.lucascastro.shared-utilities": {
+      "version": "file:SharedUtilities",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.browar.editor-toolbox": "0.13.2"
+      }
+    },
     "com.unity.addressables": {
       "version": "2.2.2",
       "depth": 0,

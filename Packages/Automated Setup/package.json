@@ -1,0 +1,15 @@
+{
+  "name": "com.lucascastro.automated-setup",
+  "version": "1.0.0",
+  "displayName": "Automated Setup",
+  "description": "Automatically setups folder hierarchy and imports usual packages and assets.",
+  "keywords": [
+    "setup",
+    "automated",
+    "automatic"
+  ],
+  "author": {
+    "name": "Lucas Castro",
+    "email": "lucas.ocastro42@gmail.com"
+  }
+}
