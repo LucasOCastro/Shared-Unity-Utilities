@@ -29,12 +29,11 @@ namespace AutomatedSetup.Editor
         [MenuItem("Tools/Setup/Install Essential Packages")]
         private static void InstallEssentialPackages()
         {
-            Packages.InstallPackages(new[]
-            {
+            Packages.InstallPackages(
                 "git+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-                "git+https://github.com/adammyhre/Unity-Utils.git",
-                "git+https://github.com/arimger/Unity-Editor-Toolbox.git#upm"
-            });
+                "git+https://github.com/arimger/Unity-Editor-Toolbox.git#upm",
+                "git+https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/SharedUtilities/"
+            );
         }
         
         [MenuItem("Tools/Setup/Setup Folder Structure")]
@@ -93,7 +92,7 @@ namespace AutomatedSetup.Editor
                 Debug.Log($"Finished installing packages.");
             }
 
-            public static void InstallPackages(string[] packages)
+            public static void InstallPackages(params string[] packages)
             {
                 _ = InstallPackagesAsync(new(packages));
             }

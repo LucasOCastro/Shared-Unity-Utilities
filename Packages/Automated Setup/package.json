@@ -1,6 +1,6 @@
 {
   "name": "com.lucascastro.automated-setup",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "Automated Setup",
   "description": "Automatically setups folder hierarchy and imports usual packages and assets.",
   "keywords": [
