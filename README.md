@@ -1,9 +1,9 @@
 # Shared Unity Utilities
-This is a personal collection of packages I use in my own projects. Many things are heavily inspired by `Git-Amend`'s videos on youtube.
+This is a personal collection of packages I use in my own projects. Many things are heavily inspired by [git-amend](https://www.youtube.com/@git-amend)'s videos on youtube.
 
 ### Project Setup
 `https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/Automated Setup/`
-Automatically creates my usual folder structure and imports my packages and assets of choice.
+Automatically creates my usual folder structure and imports my packages and assets of choice, including Shared Utilities below.
 
 ### Shared Utilities
 `https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/SharedUtilities/`
