@@ -35,6 +35,8 @@ namespace SharedUtilities.Editor.Interfaces
 
             underlyingProp.objectReferenceValue = ExtractValueAndValidate(selected, oldValue, interfaceType);
             
+            InterfaceReferenceLabelDrawer.OnGUI(position, selected, interfaceType);
+            
             EditorGUI.EndProperty();
 
         }
