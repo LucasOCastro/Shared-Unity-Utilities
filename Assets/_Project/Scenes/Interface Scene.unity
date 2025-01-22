@@ -375,7 +375,7 @@ MonoBehaviour:
   _a: 1
   _testKey: 32
   InterfaceReference:
-    <UnderlyingValue>k__BackingField: {fileID: 0}
+    <UnderlyingValue>k__BackingField: {fileID: 6615418009202173813}
 --- !u!1 &8786717399440591308
 GameObject:
   m_ObjectHideFlags: 0
