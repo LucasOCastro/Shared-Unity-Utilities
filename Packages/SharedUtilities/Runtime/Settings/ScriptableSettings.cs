@@ -46,13 +46,31 @@ namespace SharedUtilities.Settings
         {
             return (T)GetOrCreate(typeof(T));
         }
-        
+
+        private void OnEnable()
+        {
+            if (_instances.TryGetValue(GetType(), out var instance))
+            {
+                Debug.LogWarning($"Tried adding {GetType().Name} - {this}", this);
+                Debug.LogWarning($"Already contains instance of {GetType().Name} - instance", instance);
+                if (instance != this)
+                    Debug.LogError($"Tried adding {GetType().Name} - {this} but already contains {GetType().Name} - {instance}", this);
+            }
+            else _instances[GetType()] = this;
+        }
+
+        private void OnDisable()
+        {
+            if (_instances.ContainsValue(this))
+                _instances.Remove(GetType());
+        }
+
         private static string GetAssetPathFor(Type type)
         {
             var attribute = type.GetCustomAttribute<ScriptableSettingsAttribute>();
             return $"{attribute.AssetFolderPath}/{type.Name}.asset";
         }
-        //TODO must preload settings and store then from editor to application, serializing the references somehow
+        
         private static bool TryGetExistingInstance(Type type, out ScriptableSettings instance)
         {
             // if already cached
@@ -105,7 +123,6 @@ namespace SharedUtilities.Settings
         
         
 #if UNITY_EDITOR
-        //TODO verify if this is enough
         private bool? _oldPreload;
         private void OnValidate()
         {
