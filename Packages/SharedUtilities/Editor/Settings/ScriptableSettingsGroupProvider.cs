@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using SharedUtilities.Settings;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine.Pool;
 
 namespace SharedUtilities.Editor.Settings
@@ -27,7 +28,7 @@ namespace SharedUtilities.Editor.Settings
             ScriptableSettings settings = ScriptableSettings.GetOrCreate(type);
             return new(attribute.MenuPath, SettingsScope.Project)
             {
-                activateHandler = (_, rootElement) => settings.CreateSettingsGui_Editor(rootElement)
+                activateHandler = (_, rootElement) => rootElement.Add(new InspectorElement(settings))
             };
         }
     }

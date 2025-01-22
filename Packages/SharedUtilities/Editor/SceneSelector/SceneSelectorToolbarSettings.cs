@@ -15,6 +15,7 @@ namespace SharedUtilities.Editor.SceneSelector
         
         public SceneListMode ScenesToShow = SceneListMode.ListedInBuildAndEnabled;
         
+        [ReorderableList]
         [ShowIf(nameof(ScenesToShow), SceneListMode.AllInProject)]
         public string[] AllInProjectDirectories = { "Assets/_Project" };
         

@@ -1,20 +1,23 @@
-﻿#if UNITY_EDITOR
-using SharedUtilities.Extensions;
-using UnityEditor;
-#endif
-
-using UnityEditor.UIElements;
-using UnityEngine;
-using UnityEngine.UIElements;
+﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using UnityEngine.Pool;
+using Object = UnityEngine.Object;
+using SharedUtilities.Extensions;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace SharedUtilities.Settings
 {
     public abstract class ScriptableSettings : ScriptableObject
     {
+        [Tooltip("If true, the asset will be preloaded for the build. Set to false if the setting is editor only.")]
+        public bool PreloadAsset = true;
+        
         private static readonly Dictionary<Type, ScriptableSettings> _instances = new();
         
         public static ScriptableSettings GetOrCreate(Type type)
@@ -102,17 +105,23 @@ namespace SharedUtilities.Settings
         
         
 #if UNITY_EDITOR
-        public void CreateSettingsGui_Editor(VisualElement root)
+        //TODO verify if this is enough
+        private bool? _oldPreload;
+        private void OnValidate()
         {
-            var obj = new SerializedObject(this);
-            root.Clear();
-            CreateSettingsGui_Editor(root, obj);
-        }
-        
-        protected virtual void CreateSettingsGui_Editor(VisualElement root, SerializedObject obj)
-        {
-            var inspector = new InspectorElement(obj);
-            root.Add(inspector);
+            if (_oldPreload == PreloadAsset)
+                return;
+            
+            using var _ = ListPool<Object>.Get(out var preloaded);
+            
+            preloaded.AddRange(PlayerSettings.GetPreloadedAssets());
+            if (PreloadAsset)
+                preloaded.AddIfNotContains(this);
+            else
+                preloaded.Remove(this);
+            PlayerSettings.SetPreloadedAssets(preloaded.ToArray());
+            
+            _oldPreload = PreloadAsset;
         }
 #endif
     }

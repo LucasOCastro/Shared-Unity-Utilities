@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fe17d9e1844cd98e6aa220bc55d364, type: 3}
   m_Name: SceneSelectorToolbarSettings
   m_EditorClassIdentifier: 
+  PreloadAsset: 0
   ScenesToShow: 2
   AllInProjectDirectories:
   - Assets/_Project
