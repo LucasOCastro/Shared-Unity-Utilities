@@ -7,7 +7,7 @@ namespace SharedUtilities.Extensions
     // Some from https://github.com/adammyhre/Unity-Utils - thanks Git-Amend!!
     public static class TypeUtils
     {
-        private static readonly Dictionary<Type, string> TypeDisplayNames = new()
+        private static readonly Dictionary<Type, string> _typeDisplayNames = new()
         {
             { typeof(int), "int" },
             { typeof(float), "float" },
@@ -26,7 +26,7 @@ namespace SharedUtilities.Extensions
             { typeof(object), "object" }
         };
 
-        private static readonly Type[] ValueTupleTypes =
+        private static readonly Type[] _valueTupleTypes =
         {
             typeof(ValueTuple<>),
             typeof(ValueTuple<,>),
@@ -88,7 +88,7 @@ namespace SharedUtilities.Extensions
                 return $"{innerTypeName}[{new string(',', rank - 1)}]";
             }
             
-            if (TypeDisplayNames.TryGetValue(type, out string baseName1)) 
+            if (_typeDisplayNames.TryGetValue(type, out string baseName1)) 
             {
                 if (!type.IsGenericType || type.IsConstructedGenericType)
                     return baseName1;
@@ -108,7 +108,7 @@ namespace SharedUtilities.Extensions
                 var baseType = type.GetGenericTypeDefinition();
                 Type[] genericArgs = type.GetGenericArguments();
 
-                if (ValueTupleTypes.Contains(baseType))
+                if (_valueTupleTypes.Contains(baseType))
                 {
                     var tupleNames = type.GetGenericArguments()
                         .Select(t => GetDisplayName(t));
@@ -144,5 +144,8 @@ namespace SharedUtilities.Extensions
             string declaringName = GetDisplayName(declaringType, includeNamespace);
             return $"{declaringName}.{type.Name}";
         }
+        
+        public static bool IsGenericTypeWithDefinition(this Type type, Type genericTypeDefinition) =>
+            type.IsGenericType && type.GetGenericTypeDefinition() == genericTypeDefinition;
     }
 }
