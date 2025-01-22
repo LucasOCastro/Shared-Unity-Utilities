@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SharedUtilities.Extensions
 {
@@ -77,5 +79,20 @@ namespace SharedUtilities.Extensions
             foreach (var t in col)
                 action(t, i++);
         }
+        
+        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> col, Predicate<T> predicate) => 
+            col.Where(t => !predicate(t));
+        
+        public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> col, Func<T, int, bool> predicate) => 
+            col.Where((t, i) => !predicate(t, i));
+        
+        public static IEnumerable<T> WhereNotNull<T>(this IEnumerable<T> col) => 
+            col.Where(t => t != null);
+        
+        public static IEnumerable<string> WhereNotNullOrEmpty(this IEnumerable<string> col) => 
+            col.WhereNot(string.IsNullOrEmpty);
+        
+        public static IEnumerable<string> WhereNotNullOrWhitespace(this IEnumerable<string> col) =>
+            col.WhereNot(string.IsNullOrWhiteSpace);
     }
 }
