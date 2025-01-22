@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿// Ideally, this should be in an editor only assembly def, but it is also used in runtime scripts 
+#if UNITY_EDITOR
+
+using System.IO;
 using UnityEditor;
 
 namespace SharedUtilities.Extensions
 {
-    //TODO this should be editor only, but it is also used in runtime scripts
     public static class EditorAssetDatabaseUtils
     {
         private static void EnsureFolderExistsRecursive(string parentPath, string currentFolder)
@@ -35,3 +37,5 @@ namespace SharedUtilities.Extensions
         }
     }
 }
+
+#endif
