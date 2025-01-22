@@ -15,15 +15,12 @@ namespace SharedUtilities.Interfaces
         [CanBeNull]
         public TInterface Value
         {
-            get
+            get => UnderlyingValue.OrNull() switch
             {
-                return UnderlyingValue.OrNull() switch
-                {
-                    null => null,
-                    TInterface interfaceValue => interfaceValue,
-                    _ => throw new InvalidCastException($"Underlying value {UnderlyingValue} of type {typeof(TObject).Name} needs to implement {typeof(TInterface).Name}")
-                };
-            }
+                null => null,
+                TInterface interfaceValue => interfaceValue,
+                _ => throw new InvalidCastException($"Underlying value {UnderlyingValue} of type {typeof(TObject).Name} needs to implement {typeof(TInterface).Name}")
+            };
 
             set => UnderlyingValue = value.OrNull() switch
             {
