@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using SharedUtilities.Extensions;
 using SharedUtilities.Settings;
 using UnityEditor;
 using UnityEditor.UIElements;
