@@ -18,6 +18,17 @@ namespace SharedUtilities.Editor.Interfaces
             padding = new(0, 2, 0, 0)
         };
         
+        public static void DrawProperty(Rect position, SerializedProperty property, GUIContent label, Type objectType,
+            Type interfaceType)
+        {
+            var oldValue = property.objectReferenceValue;
+            var selected = EditorGUI.ObjectField(position, label, oldValue, objectType, true);
+            var extracted = ExtractValueAndValidate(selected, oldValue, interfaceType);
+            property.objectReferenceValue = extracted;
+            
+            DrawInterfaceTypeLabel(position, selected, interfaceType);
+        }
+        
         [CanBeNull]
         public static Object ExtractValueAndValidate([CanBeNull] Object selected, [CanBeNull] Object oldValue, 
             Type interfaceType)
@@ -30,14 +41,14 @@ namespace SharedUtilities.Editor.Interfaces
                     var component = go.GetComponent(interfaceType);
                     if (!component)
                     {
-                        Debug.LogError($"Could not find component which implements {interfaceType.Name} on {go.name}", go);
+                        Debug.LogWarning($"Could not find component which implements {interfaceType.Name} on {go.name}", go);
                         return oldValue;
                     }
                     return component;
                 default:
                     if (!selected.GetType().GetInterfaces().Contains(interfaceType))
                     {
-                        Debug.LogError($"{selected} does not implement {interfaceType.Name}", selected);
+                        Debug.LogWarning($"{selected.name} does not implement {interfaceType.Name}", selected);
                         return oldValue;
                     }
                     return selected;

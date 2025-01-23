@@ -6,7 +6,6 @@ using SharedUtilities.Extensions;
 using SharedUtilities.Interfaces;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace SharedUtilities.Editor.Interfaces
 {
@@ -29,13 +28,7 @@ namespace SharedUtilities.Editor.Interfaces
             EditorGUI.BeginProperty(position, label, property);
             
             var underlyingProp = property.FindBackingFieldPropertyRelative(UnderlyingValuePropertyName);
-            var oldValue = underlyingProp.objectReferenceValue;
-            var selected = EditorGUI.ObjectField(position, label, oldValue, typeof(Object), true);
-
-            underlyingProp.objectReferenceValue =
-                InterfaceReferenceUtils.ExtractValueAndValidate(selected, oldValue, interfaceType);
-            
-            InterfaceReferenceUtils.DrawInterfaceTypeLabel(position, selected, interfaceType);
+            InterfaceReferenceUtils.DrawProperty(position, underlyingProp, label, objectType, interfaceType);
             
             EditorGUI.EndProperty();
 
