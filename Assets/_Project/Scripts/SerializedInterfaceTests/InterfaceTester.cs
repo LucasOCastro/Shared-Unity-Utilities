@@ -8,7 +8,16 @@ namespace SharedUtilitiesPackages.SerializedInterfaceTests
         [SerializeField] private int _a = 1;
         [SerializeField] private KeyCode _testKey = KeyCode.Space;
         
-        public InterfaceReference<IInterfaceTest> InterfaceReference;
+        public InterfaceReference<IInterfaceTest> GeneralRef;
+        public InterfaceReference<IInterfaceTest, Component> CompRef;
+        public InterfaceReference<IInterfaceTest, ScriptableObject> SORef;
+        
+        [RequiresInterface(typeof(IInterfaceTest))]
+        public Object GeneralAttribute;
+        [RequiresInterface(typeof(IInterfaceTest))]
+        public Component CompAttribute;
+        [RequiresInterface(typeof(IInterfaceTest))]
+        public ScriptableObject SOAttribute;
 
         private void Start() => Test();
 
@@ -20,14 +29,14 @@ namespace SharedUtilitiesPackages.SerializedInterfaceTests
 
         private void Test()
         {
-            if (InterfaceReference?.Value == null)
+            if (GeneralRef?.Value == null)
             {
                 Debug.Log("Null");
                 return;
             }
             
-            InterfaceReference.Value.Foo(1);
-            Debug.Log($"Tested with value = {InterfaceReference.Value.Value}");
+            GeneralRef.Value.Foo(1);
+            Debug.Log($"Tested with value = {GeneralRef.Value.Value}");
         }
     }
 }

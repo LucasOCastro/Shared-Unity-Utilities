@@ -374,8 +374,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _a: 1
   _testKey: 32
-  InterfaceReference:
+  GeneralRef:
     <UnderlyingValue>k__BackingField: {fileID: 6615418009202173813}
+  CompRef:
+    <UnderlyingValue>k__BackingField: {fileID: 6615418009202173813}
+  SORef:
+    <UnderlyingValue>k__BackingField: {fileID: 11400000, guid: ffa482e8c8f2e2b4683360bd793bfbb9, type: 2}
+  GeneralAttribute: {fileID: 11400000, guid: ffa482e8c8f2e2b4683360bd793bfbb9, type: 2}
+  CompAttribute: {fileID: 6615418009202173813}
+  SOAttribute: {fileID: 11400000, guid: ffa482e8c8f2e2b4683360bd793bfbb9, type: 2}
 --- !u!1 &8786717399440591308
 GameObject:
   m_ObjectHideFlags: 0
