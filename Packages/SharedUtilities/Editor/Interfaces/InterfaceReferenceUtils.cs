@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Linq;
+using JetBrains.Annotations;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace SharedUtilities.Editor.Interfaces
 {
-    internal static class InterfaceReferenceLabelDrawer
+    internal static class InterfaceReferenceUtils
     {
         private static readonly GUIStyle _labelStyle = new(EditorStyles.label)
         {
@@ -15,20 +17,46 @@ namespace SharedUtilities.Editor.Interfaces
             alignment = TextAnchor.MiddleRight,
             padding = new(0, 2, 0, 0)
         };
-
-        public static void OnGUI(Rect position, Object value, Type interfaceType)
+        
+        [CanBeNull]
+        public static Object ExtractValueAndValidate([CanBeNull] Object selected, [CanBeNull] Object oldValue, 
+            Type interfaceType)
         {
-            var controlID = GUIUtility.GetControlID(FocusType.Passive) - 1;
-            string displayString = ShouldDisplayTypeLabel(position, value) ? $"({interfaceType.Name})" : "";
-            DrawInterfaceNameLabel(position, displayString, controlID);
+            switch (selected)
+            {
+                case null:
+                    return null;
+                case GameObject go:
+                    var component = go.GetComponent(interfaceType);
+                    if (!component)
+                    {
+                        Debug.LogError($"Could not find component which implements {interfaceType.Name} on {go.name}", go);
+                        return oldValue;
+                    }
+                    return component;
+                default:
+                    if (!selected.GetType().GetInterfaces().Contains(interfaceType))
+                    {
+                        Debug.LogError($"{selected} does not implement {interfaceType.Name}", selected);
+                        return oldValue;
+                    }
+                    return selected;
+            }
         }
-
+        
         private static bool ShouldDisplayTypeLabel(Rect position, Object value)
         {
             bool isHovering = position.Contains(Event.current.mousePosition);
             return value == null || isHovering;
         }
 
+        public static void DrawInterfaceTypeLabel(Rect position, Object value, Type interfaceType)
+        {
+            var controlID = GUIUtility.GetControlID(FocusType.Passive) - 1;
+            string displayString = ShouldDisplayTypeLabel(position, value) ? $"({interfaceType.Name})" : "";
+            DrawInterfaceNameLabel(position, displayString, controlID);
+        }
+        
         private static void DrawInterfaceNameLabel(Rect position, string displayString, int controlId)
         {
             if (Event.current.type != EventType.Repaint)

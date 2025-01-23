@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using SharedUtilities.Editor.Extensions;
 using SharedUtilities.Extensions;
 using SharedUtilities.Interfaces;
@@ -33,39 +32,15 @@ namespace SharedUtilities.Editor.Interfaces
             var oldValue = underlyingProp.objectReferenceValue;
             var selected = EditorGUI.ObjectField(position, label, oldValue, typeof(Object), true);
 
-            underlyingProp.objectReferenceValue = ExtractValueAndValidate(selected, oldValue, interfaceType);
+            underlyingProp.objectReferenceValue =
+                InterfaceReferenceUtils.ExtractValueAndValidate(selected, oldValue, interfaceType);
             
-            InterfaceReferenceLabelDrawer.OnGUI(position, selected, interfaceType);
+            InterfaceReferenceUtils.DrawInterfaceTypeLabel(position, selected, interfaceType);
             
             EditorGUI.EndProperty();
 
         }
-
-        [CanBeNull]
-        private static Object ExtractValueAndValidate([CanBeNull] Object selected, [CanBeNull] Object oldValue, Type interfaceType)
-        {
-            switch (selected)
-            {
-                case null:
-                    return null;
-                case GameObject go:
-                    var component = go.GetComponent(interfaceType);
-                    if (!component)
-                    {
-                        Debug.LogError($"Could not find component which implements {interfaceType.Name} on {go.name}", go);
-                        return oldValue;
-                    }
-                    return component;
-                default:
-                    if (!selected.GetType().GetInterfaces().Contains(interfaceType))
-                    {
-                        Debug.LogError($"{selected} does not implement {interfaceType.Name}", selected);
-                        return oldValue;
-                    }
-                    return selected;
-            }
-        }
-
+        
         private static (Type interfaceType, Type objectType) GetTypeArguments(Type fieldType)
         {
             // Extract inner type from collection
