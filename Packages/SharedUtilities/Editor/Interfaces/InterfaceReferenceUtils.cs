@@ -41,14 +41,14 @@ namespace SharedUtilities.Editor.Interfaces
                     var component = go.GetComponent(interfaceType);
                     if (!component)
                     {
-                        Debug.LogWarning($"Could not find component which implements {interfaceType.Name} on {go.name}", go);
+                        Debug.LogError($"Could not find component which implements {interfaceType.Name} on {go.name}", go);
                         return oldValue;
                     }
                     return component;
                 default:
                     if (!selected.GetType().GetInterfaces().Contains(interfaceType))
                     {
-                        Debug.LogWarning($"{selected.name} does not implement {interfaceType.Name}", selected);
+                        Debug.LogError($"{selected.name} does not implement {interfaceType.Name}", selected);
                         return oldValue;
                     }
                     return selected;
@@ -68,6 +68,7 @@ namespace SharedUtilities.Editor.Interfaces
             DrawInterfaceNameLabel(position, displayString, controlID);
         }
         
+        //TODO avoid overlap with object name on smaller screen
         private static void DrawInterfaceNameLabel(Rect position, string displayString, int controlId)
         {
             if (Event.current.type != EventType.Repaint)
