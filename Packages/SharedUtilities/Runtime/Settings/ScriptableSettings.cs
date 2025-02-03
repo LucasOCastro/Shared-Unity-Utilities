@@ -37,6 +37,7 @@ namespace SharedUtilities.Settings
             string assetPath = GetAssetPathFor(type);
             EditorAssetDatabaseUtils.EnsureFolderExistsAndSkipFrame(assetPath, () =>
             {
+                Debug.Log("Create folder and save");
                 AssetDatabase.CreateAsset(instance, assetPath);
                 AssetDatabase.SaveAssets();
             });
@@ -125,6 +126,7 @@ namespace SharedUtilities.Settings
             EditorAssetDatabaseUtils.EnsureFolderExistsAndSkipFrame(expectedAssetPath, () =>
             {
                 string moveResult = AssetDatabase.MoveAsset(path, expectedAssetPath);
+                Debug.Log(moveResult);
                 AssetDatabase.SaveAssets();
                 Debug.Log($"Moved {path} to {expectedAssetPath}: {(string.IsNullOrEmpty(moveResult) ? "Success" : moveResult)}");
             });

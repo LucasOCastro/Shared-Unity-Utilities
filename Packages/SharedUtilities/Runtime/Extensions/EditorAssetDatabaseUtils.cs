@@ -17,11 +17,10 @@ namespace SharedUtilities.Extensions
                 return;
             
             // If already exists, return
-            if (AssetDatabase.IsValidFolder(parentPath))
+            if (AssetDatabase.IsValidFolder(Path.Join(parentPath, currentFolder)))
                 return;
             
             EnsureFolderExistsRecursive(Path.GetDirectoryName(parentPath), Path.GetFileName(parentPath));
-            Debug.Log($"CREATE: {currentFolder}");
             AssetDatabase.CreateFolder(parentPath, currentFolder);
         }
 
@@ -39,6 +38,7 @@ namespace SharedUtilities.Extensions
                 path = Path.GetDirectoryName(path);
             
             // If already exists, return
+            Debug.Log(AssetDatabase.IsValidFolder(path));
             if (AssetDatabase.IsValidFolder(path))
                 return false;
             
@@ -60,10 +60,10 @@ namespace SharedUtilities.Extensions
         {
             bool created = EnsureFolderExists(path);
             if (created)
-                TaskUtils.YieldNull().ContinueWith(() => callback(true));
+                NextFrame.Do(() => callback(true));
             else
                 callback(false);
-            
+
             return created;
         }
         
