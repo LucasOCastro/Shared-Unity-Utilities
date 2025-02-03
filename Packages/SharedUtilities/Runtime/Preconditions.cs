@@ -55,7 +55,12 @@ namespace SharedUtilities
                 return;
             }
 
-            throw message == null ? new InvalidOperationException() : new InvalidOperationException(message);
+            throw message == null ? new InvalidOperationException() : new(message);
+        }
+
+        public static void CheckStateNamed(bool expression, string name)
+        {
+            CheckState(expression, $"{name} = false");
         }
     }
 }

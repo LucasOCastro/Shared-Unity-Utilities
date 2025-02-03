@@ -22,10 +22,12 @@ namespace SharedUtilities.Settings
         
         public static ScriptableSettings GetOrCreate(Type type)
         {
-            Preconditions.CheckState(type.IsSubclassOf(typeof(ScriptableSettings)));
-            Preconditions.CheckState(!type.IsAbstract);
+            Preconditions.CheckState(type.IsSubclassOf(typeof(ScriptableSettings)),
+                $"Type {type.Name} is not a subclass of {nameof(ScriptableSettings)}");
+            Preconditions.CheckState(!type.IsAbstract, 
+                $"Type {type.Name} is abstract");
             
-            if (TryGetExistingInstance(type, out var instance))
+            if (_instances.TryGetValue(type, out var instance))
                 return instance;
             
             instance = (ScriptableSettings)CreateInstance(type);
@@ -33,9 +35,11 @@ namespace SharedUtilities.Settings
             // If we're in the editor, save the asset locally
             #if UNITY_EDITOR
             string assetPath = GetAssetPathFor(type);
-            EditorAssetDatabaseUtils.EnsureFolderExists(assetPath);
-            AssetDatabase.CreateAsset(instance, assetPath);
-            AssetDatabase.SaveAssets();
+            EditorAssetDatabaseUtils.EnsureFolderExistsAndSkipFrame(assetPath, () =>
+            {
+                AssetDatabase.CreateAsset(instance, assetPath);
+                AssetDatabase.SaveAssets();
+            });
             #endif
             
             _instances[type] = instance;
@@ -47,12 +51,18 @@ namespace SharedUtilities.Settings
             return (T)GetOrCreate(typeof(T));
         }
 
+        static ScriptableSettings()
+        {
+            _instances.Clear();
+        }
+
         private void OnEnable()
         {
-            if (_instances.TryGetValue(GetType(), out var instance))
+            if (!this)
+                return;
+            
+            if (TryGetExistingInstance(GetType(), out var instance) && instance)
             {
-                Debug.LogWarning($"Tried adding {GetType().Name} - {this}", this);
-                Debug.LogWarning($"Already contains instance of {GetType().Name} - instance", instance);
                 if (instance != this)
                     Debug.LogError($"Tried adding {GetType().Name} - {this} but already contains {GetType().Name} - {instance}", this);
             }
@@ -71,6 +81,7 @@ namespace SharedUtilities.Settings
             return $"{attribute.AssetFolderPath}/{type.Name}.asset";
         }
         
+        
         private static bool TryGetExistingInstance(Type type, out ScriptableSettings instance)
         {
             // if already cached
@@ -82,7 +93,6 @@ namespace SharedUtilities.Settings
 #else
             // if exists in target path
             string expectedAssetPath = GetAssetPathFor(type);
-            EditorAssetDatabaseUtils.EnsureFolderExists(expectedAssetPath);
             instance = AssetDatabase.LoadAssetAtPath<ScriptableSettings>(expectedAssetPath);
             if (instance)
             {
@@ -91,7 +101,6 @@ namespace SharedUtilities.Settings
             }
             
             // if exists elsewhere in project
-            
             var foundGuids = AssetDatabase.FindAssets($"t:{type.Name}");
             switch (foundGuids.Length)
             {
@@ -113,9 +122,12 @@ namespace SharedUtilities.Settings
             _instances[type] = instance;
             
             // move to correct path
-            AssetDatabase.MoveAsset(path, expectedAssetPath);
-            AssetDatabase.SaveAssets();
-            Debug.Log($"Moved {path} to {expectedAssetPath}");
+            EditorAssetDatabaseUtils.EnsureFolderExistsAndSkipFrame(expectedAssetPath, () =>
+            {
+                string moveResult = AssetDatabase.MoveAsset(path, expectedAssetPath);
+                AssetDatabase.SaveAssets();
+                Debug.Log($"Moved {path} to {expectedAssetPath}: {(string.IsNullOrEmpty(moveResult) ? "Success" : moveResult)}");
+            });
             
             return true;
 #endif
