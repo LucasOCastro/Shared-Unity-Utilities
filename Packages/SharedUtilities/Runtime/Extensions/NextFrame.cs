@@ -6,6 +6,7 @@ namespace SharedUtilities.Extensions
 {
     public static class NextFrame
     {
+        // TODO might use a service locator or injection
         public static void Do(Action action, bool forceEditor = false)
         {
 #if UNITY_EDITOR
