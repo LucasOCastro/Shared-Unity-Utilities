@@ -38,7 +38,6 @@ namespace SharedUtilities.Extensions
                 path = Path.GetDirectoryName(path);
             
             // If already exists, return
-            Debug.Log(AssetDatabase.IsValidFolder(path));
             if (AssetDatabase.IsValidFolder(path))
                 return false;
             

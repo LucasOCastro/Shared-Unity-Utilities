@@ -3,7 +3,6 @@ using System.Collections;
 using System.Reflection;
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -63,6 +62,7 @@ namespace SharedUtilities.Editor
         {
             var element = new VisualElement
             {
+                name = "ToolbarExtension",
                 style =
                 {
                     flexGrow = 1,
@@ -75,6 +75,7 @@ namespace SharedUtilities.Editor
                 style =
                 {
                     flexGrow = 1,
+                    flexDirection = FlexDirection.Row
                 },
                 onGUIHandler = onGui
             };

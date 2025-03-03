@@ -27,7 +27,8 @@ namespace SharedUtilities.Settings
             Preconditions.CheckState(!type.IsAbstract, 
                 $"Type {type.Name} is abstract");
             
-            if (_instances.TryGetValue(type, out var instance))
+            //if (_instances.TryGetValue(type, out var instance))
+            if (TryGetExistingInstance(type, out var instance))
                 return instance;
             
             instance = (ScriptableSettings)CreateInstance(type);
@@ -135,11 +136,12 @@ namespace SharedUtilities.Settings
 #endif
         }
         
-        
 #if UNITY_EDITOR
         private bool? _oldPreload;
-        private void OnValidate()
+#endif
+        protected virtual void OnValidate()
         {
+#if UNITY_EDITOR
             if (_oldPreload == PreloadAsset)
                 return;
             
@@ -153,7 +155,7 @@ namespace SharedUtilities.Settings
             PlayerSettings.SetPreloadedAssets(preloaded.ToArray());
             
             _oldPreload = PreloadAsset;
-        }
 #endif
+        }
     }
 }
