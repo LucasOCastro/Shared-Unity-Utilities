@@ -74,14 +74,23 @@ namespace SharedUtilities.Editor
             {
                 style =
                 {
-                    flexGrow = 1,
-                    flexDirection = FlexDirection.Row
+                    flexGrow = 1
                 },
-                onGUIHandler = onGui
+                onGUIHandler = InternalGui
             };
 
             element.Add(container);
             parent.Add(element);
+
+            return;
+            
+            void InternalGui()
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    onGui?.Invoke();
+                }
+            }
         }
     }
 }
