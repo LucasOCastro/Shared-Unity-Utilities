@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: SceneSelectorToolbarSettings
   m_EditorClassIdentifier: 
   PreloadAsset: 0
+  ShowToolbar: 1
+  ShowSpaceBefore: 0
+  ToolbarSide: 1
   ScenesToShow: 2
   AllInProjectDirectories:
   - Assets/_Project

@@ -1,4 +1,5 @@
 ﻿using SharedUtilities.Settings;
+using UnityEngine;
 
 namespace SharedUtilities.Editor.SceneSelector
 {
@@ -11,6 +12,19 @@ namespace SharedUtilities.Editor.SceneSelector
             ListedInBuild = 1,
             AllInProject = 2
         }
+
+        public enum Side
+        {
+            Left = 0,
+            Right = 1
+        }
+        
+        public bool ShowToolbar = true;
+        
+        public bool ShowSpaceBefore = true;
+        
+        [Tooltip("Needs a recompile to take effect")]
+        public Side ToolbarSide = Side.Right;
         
         public SceneListMode ScenesToShow = SceneListMode.ListedInBuildAndEnabled;
         
