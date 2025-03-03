@@ -1,5 +1,4 @@
 ﻿using SharedUtilities.Settings;
-using UnityEngine;
 
 namespace SharedUtilities.Editor.SceneSelector
 {
@@ -15,8 +14,6 @@ namespace SharedUtilities.Editor.SceneSelector
         
         public SceneListMode ScenesToShow = SceneListMode.ListedInBuildAndEnabled;
         
-        [ReorderableList]
-        [ShowIf(nameof(ScenesToShow), SceneListMode.AllInProject)]
         public string[] AllInProjectDirectories = { "Assets/_Project" };
         
         public static SceneSelectorToolbarSettings GetOrCreate() => GetOrCreate<SceneSelectorToolbarSettings>();

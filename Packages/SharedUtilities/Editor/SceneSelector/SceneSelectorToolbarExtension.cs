@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SharedUtilities.Extensions;
-using Toolbox.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,7 +11,7 @@ namespace SharedUtilities.Editor.SceneSelector
     {
         static SceneSelectorToolbarExtension()
         {
-            ToolboxEditorToolbar.OnToolbarGui += OnToolbarGui;
+            ToolbarExtender.OnRightGui += OnToolbarGui;
         }
 
         private static IEnumerable<string> GetSceneGuids()
@@ -45,8 +44,9 @@ namespace SharedUtilities.Editor.SceneSelector
                 string assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(assetPath);
                 if (!sceneAsset) continue;
-                
-                if (GUILayout.Button(sceneAsset.name))
+
+                float width = EditorStyles.toolbarButton.CalcSize(new(sceneAsset.name)).x;
+                if (GUILayout.Button(sceneAsset.name, GUILayout.Width(width)))
                 {
                     EditorSceneUtility.StartScene(assetPath);
                 }

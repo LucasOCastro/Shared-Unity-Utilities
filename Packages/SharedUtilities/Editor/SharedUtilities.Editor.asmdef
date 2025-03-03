@@ -2,9 +2,8 @@
     "name": "SharedUtilities.Editor",
     "rootNamespace": "SharedUtilities",
     "references": [
-        "GUID:696a0953692949b40bec8730e64e1fdd",
-        "GUID:1b845e2499b39be4aab3e6ac2c8aa02a",
-        "GUID:e340dd2126e52f54eacb32e62b7e1668"
+        "GUID:e340dd2126e52f54eacb32e62b7e1668",
+        "GUID:478a2357cc57436488a56e564b08d223"
     ],
     "includePlatforms": [
         "Editor"
