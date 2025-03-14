@@ -1,12 +1,24 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
+using Assembly = System.Reflection.Assembly;
+#if UNITY_EDITOR
+using UnityEditor.Compilation;
+#endif
 
 namespace SharedUtilities.Extensions
 {
     // Some from https://github.com/adammyhre/Unity-Utils - thanks Git-Amend!!
+    [InitializeOnLoad]
     public static class TypeUtils
     {
+        static TypeUtils()
+        {
+            _allAssemblies = null;
+            _derivedTypes = null;
+        }
+            
         private static readonly Dictionary<Type, string> _typeDisplayNames = new()
         {
             { typeof(int), "int" },
@@ -58,6 +70,7 @@ namespace SharedUtilities.Extensions
         /// <param name="genericType">The Type to be used</param>
         /// <param name="nonGenericType">The non-generic type to test against.</param>
         /// <returns>If the type is a generic type of the non-generic type.</returns>
+        /// <example><code>typeof(List&lt;int&gt;}).IsGenericTypeOf(typeof(List&lt;&gt;))</code></example>
         public static bool IsGenericTypeOf(this Type genericType, Type nonGenericType)
         {
             return genericType.IsGenericType && genericType.GetGenericTypeDefinition() == nonGenericType;
@@ -147,5 +160,58 @@ namespace SharedUtilities.Extensions
         
         public static bool IsGenericTypeWithDefinition(this Type type, Type genericTypeDefinition) =>
             type.IsGenericType && type.GetGenericTypeDefinition() == genericTypeDefinition;
+
+        private static Assembly[] _allAssemblies;
+        public static Assembly[] AllAssemblies
+        {
+            get
+            {
+                if (_allAssemblies != null)
+                    return _allAssemblies;
+                
+                #if UNITY_EDITOR
+                _allAssemblies = CompilationPipeline
+                    .GetAssemblies(AssembliesType.PlayerWithoutTestAssemblies)
+                    .Select(a => a.name)
+                    .Append("Assembly-CSharp")
+                    .Select(n =>
+                    {
+                        try
+                        {
+                            return Assembly.Load(n);
+                        }
+                        catch
+                        {
+                            return null;
+                        }
+                    })
+                    .Where(a => a != null)
+                    .ToArray();
+                #else
+                _allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+                #endif
+                
+                return _allAssemblies;
+            }
+        }
+
+        
+        private static Dictionary<Type, Type[]> _derivedTypes;
+        public static Type[] GetDerivedTypes(this Type baseType)
+        {
+            _derivedTypes ??= new();
+            if (_derivedTypes.TryGetValue(baseType, out var types))
+                return types;
+
+            // TODO this wont work in cases such as DerivedType<T> : BaseType<T> for BaseType<SomeType>
+            types = AllAssemblies
+                .SelectMany(a => a.GetTypes())
+                .Append(baseType)
+                .Where(t => t.IsDerivedTypeOf(baseType))
+                .Distinct()
+                .ToArray();
+            _derivedTypes[baseType] = types;
+            return types;
+        }
     }
-}
+} 
