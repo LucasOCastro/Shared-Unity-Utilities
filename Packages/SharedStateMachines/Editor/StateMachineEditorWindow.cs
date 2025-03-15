@@ -1,66 +1,11 @@
-﻿using System;
-using System.Linq;
-using SharedUtilities.StateMachines.Editor.Graph;
+﻿using SharedUtilities.StateMachines.Editor.Graph;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace SharedUtilities.StateMachines.Editor
 {
-    public interface IInspector : IDisposable
-    {
-        void CreateGUI(VisualElement container);
-    }
-    
-    public class NodeInspector : IInspector
-    {
-        public StateNodeView Node { get; }
-        private UnityEditor.Editor _editor;
-        
-        public NodeInspector(StateNodeView node)
-        {
-            Node = node;
-            _editor = UnityEditor.Editor.CreateEditor(node.Asset);
-        }
-
-        public void CreateGUI(VisualElement container)
-        {
-            container.Add(new Label() { text = Node.Asset.name });
-            
-            var inspectorGUI = _editor.CreateInspectorGUI();
-            container.Add(inspectorGUI);
-        }
-        
-        public void Dispose()
-        {
-            Object.DestroyImmediate(_editor);
-        }
-    }
-    
-    public class EdgeInspector : IInspector
-    {
-        public ArrowEdge Edge { get; }
-        private UnityEditor.Editor _editor;
-        
-        public EdgeInspector(ArrowEdge edge)
-        {
-            Edge = edge;
-            _editor = UnityEditor.Editor.CreateEditor(edge.Assets.OfType<Object>().ToArray());
-        }
-        
-        public void CreateGUI(VisualElement container)
-        {
-            container.Add(new Label() { text = Edge.Assets.Aggregate("", (a, b) => a + b.name) });
-        }
-        
-        public void Dispose()
-        {
-            Object.DestroyImmediate(_editor);
-        }
-    }
-    
     public class StateMachineEditorWindow : EditorWindow
     {
         public static void Open(BaseStateMachineAsset target)
@@ -102,18 +47,16 @@ namespace SharedUtilities.StateMachines.Editor
         {
             _inspectorContainer.Clear();
             _currentInspector?.Dispose();
-
-            switch (element)
+            
+            IInspector inspector = element switch
             {
-                case StateNodeView node:
-                    var inspector = new NodeInspector(node);
-                    inspector.CreateGUI(_inspectorContainer);
-                    break;
-                case ArrowEdge edge:
-                    var edgeInspector = new EdgeInspector(edge);
-                    edgeInspector.CreateGUI(_inspectorContainer);
-                    break;
-            }
+                StateNodeView node => new NodeInspector(node),
+                ArrowEdge edge => new EdgeInspector(edge),
+                _ => null
+            };
+            
+            _currentInspector = inspector;
+            inspector?.CreateGUI(_inspectorContainer);
         }
 
         private VisualElement CreateInspector()

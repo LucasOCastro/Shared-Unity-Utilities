@@ -253,6 +253,7 @@ namespace SharedUtilities.StateMachines.Editor.Graph
             AddElement(edge);
 
             _edges.Add((from, to), edge);
+            //TODO add edge as well as transition
 
             return edge;
         }

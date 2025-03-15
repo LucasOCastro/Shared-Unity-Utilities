@@ -18,6 +18,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607693
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -41,6 +43,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607695
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -90,6 +94,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607696
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -109,10 +115,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   state:
     rid: 2028028348442607690
-  position: {x: 212.80005, y: 201.59998}
+  position: {x: 212, y: 205}
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607690
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -136,6 +144,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028707034103881
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -159,6 +169,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607689
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -182,6 +194,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607691
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -205,6 +219,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607697
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -228,6 +244,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607692
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
@@ -251,6 +269,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
     - rid: 2028028348442607694
       type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
       data:
