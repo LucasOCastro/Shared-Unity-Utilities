@@ -7,8 +7,7 @@ Automatically creates my usual folder structure and imports my packages and asse
 
 ### Shared Utilities
 `https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/SharedUtilities/`
-Extension methods I use often, and a preconditions class.
-Uses [Unity Toolbox](https://github.com/arimger/Unity-Editor-Toolbox) to draw a scene selector on unity's top bar.
+Extension methods I use often, a preconditions class, ScriptableObject based settings, toolbar drawing, and generally utilities usable in every project.
 
 ### State Machines
 `https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/SharedStateMachines/`
