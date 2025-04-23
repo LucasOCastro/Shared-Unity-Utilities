@@ -2,8 +2,8 @@
 {
     public interface IBaseTransition
     {
-        IState To { get; }
+        IState To { get; set; }
         
-        IPredicate Condition { get; }
+        IPredicate Condition { get; set; }
     }
 }

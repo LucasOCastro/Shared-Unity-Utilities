@@ -12,7 +12,7 @@ namespace SharedUtilities
         {
             if (value is not T result)
             {
-                throw new ArgumentException($"Value {value} of type {value.GetType().Name} is not of type {typeof(T).Name}.");
+                throw new ArgumentException($"Value {value} of type {value.OrNull()?.GetType().Name ?? "null"} is not of type {typeof(T).Name}.");
             }
             
             return result;

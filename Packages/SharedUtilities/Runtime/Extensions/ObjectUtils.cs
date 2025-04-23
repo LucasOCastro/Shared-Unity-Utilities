@@ -5,7 +5,11 @@ namespace SharedUtilities.Extensions
     public static class ObjectUtils
     {
         [CanBeNull]
-        public static T OrNull<T>(this T obj) where T : class
-            => obj.Equals(null) ? null : obj;
+        public static T OrNull<T>([CanBeNull] this T obj) where T : class
+        {
+            if (ReferenceEquals(obj, null) || obj.Equals(null))
+                return null;
+            return obj;
+        }
     }
 }

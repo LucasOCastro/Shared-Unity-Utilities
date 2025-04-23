@@ -78,14 +78,16 @@ namespace SharedUtilities.StateMachines.Editor
 
         private void OnTypeSelected(Type type)
         {
-            Debug.Log(type.ToString());
-
             var asset = ScriptableObject.CreateInstance<TransitionAsset>();
             asset.name = $"{type.GetDisplayName()} ({Edge.OutputState?.name} -> {Edge.InputState?.name})";
-            asset.transition = (IBaseTransition)Activator.CreateInstance(type);
             asset.from = Edge.OutputState;
             asset.to = Edge.InputState;
             asset.transitionType = type.AssemblyQualifiedName;
+            
+            asset.transition = (IBaseTransition)TypeUtils.InstantiateObject(type);
+            var state = asset.to.OrNull()?.state;
+            asset.transition.To = state;
+            
             Edge.GraphView.GetOrAddEdge(asset);
         }
         
