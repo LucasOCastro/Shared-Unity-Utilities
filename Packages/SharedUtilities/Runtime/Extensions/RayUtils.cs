@@ -47,8 +47,7 @@ namespace SharedUtilities.Extensions
         public static float Intersection(this Ray2D ray, Rect rect)
         {
             return rect.GetEdges()
-                .Select(e => RayFromPoints(e.a, e.b))
-                .Select(e => ray.Intersection(e))
+                .Select(e => ray.Intersection(RayFromPoints(e.a, e.b)))
                 .Where(t => !float.IsNaN(t) && t >= 0)
                 .DefaultIfEmpty(float.NaN)
                 .Min();

@@ -94,5 +94,10 @@ namespace SharedUtilities.Extensions
         
         public static IEnumerable<string> WhereNotNullOrWhitespace(this IEnumerable<string> col) =>
             col.WhereNot(string.IsNullOrWhiteSpace);
+
+        public static string ToSeparatedString<T>(this IEnumerable<T> col, string separator) =>
+            col.Select(x => x.ToString()).Aggregate((a, b) => a + separator + b);
+        
+        public static string ToCommaSeparatedString<T>(this IEnumerable<T> col) => ToSeparatedString(col, ", ");
     }
 }
