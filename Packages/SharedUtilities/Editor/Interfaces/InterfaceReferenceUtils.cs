@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using JetBrains.Annotations;
+using SharedUtilities.Extensions;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -63,8 +64,9 @@ namespace SharedUtilities.Editor.Interfaces
 
         public static void DrawInterfaceTypeLabel(Rect position, Object value, Type interfaceType)
         {
-            var controlID = GUIUtility.GetControlID(FocusType.Passive) - 1;
-            string displayString = ShouldDisplayTypeLabel(position, value) ? $"({interfaceType.Name})" : "";
+            int controlID = GUIUtility.GetControlID(FocusType.Passive) - 1;
+            string displayName = interfaceType.GetDisplayName();
+            string displayString = ShouldDisplayTypeLabel(position, value) ? $"({displayName})" : "";
             DrawInterfaceNameLabel(position, displayString, controlID);
         }
         
