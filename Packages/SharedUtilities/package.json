@@ -1,8 +1,8 @@
 {
   "name": "com.lucascastro.shared-utilities",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "displayName": "Shared Utilities",
-  "description": "Automatically setups folder hierarchy and imports usual packages and assets.",
+  "description": "General utility functions, editors, extensions, etc.",
   "dependencies": {
     "com.unity.editorcoroutines": "1.0.0"
   },
