@@ -5,19 +5,18 @@ namespace SharedUtilitiesPackages.SerializedInterfaceTests
 {
     public class InterfaceTester : MonoBehaviour
     { 
-        [SerializeField] private int _a = 1;
         [SerializeField] private KeyCode _testKey = KeyCode.Space;
         
         public InterfaceReference<IInterfaceTest> GeneralRef;
         public InterfaceReference<IInterfaceTest, Component> CompRef;
-        public InterfaceReference<IInterfaceTest, ScriptableObject> SORef;
+        public InterfaceReference<IInterfaceTest, ScriptableObject> SoRef;
         
         [RequiresInterface(typeof(IInterfaceTest))]
         public Object GeneralAttribute;
         [RequiresInterface(typeof(IInterfaceTest))]
         public Component CompAttribute;
         [RequiresInterface(typeof(IInterfaceTest))]
-        public ScriptableObject SOAttribute;
+        public ScriptableObject SoAttribute;
 
         private void Start() => Test();
 
