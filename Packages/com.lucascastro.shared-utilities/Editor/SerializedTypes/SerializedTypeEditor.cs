@@ -16,16 +16,17 @@ namespace SharedUtilities.Editor.SerializedTypes
     {
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
-            var attr = (SerializedTypeAttribute)attribute;
+            // TODO consider making it a autocomplete
             var stringProperty = GetUnderlyingProperty(property, fieldInfo.FieldType);
-            var element = stringProperty != null ? MakeGUI(stringProperty, attr) : null;
+            var element = stringProperty != null ? MakeGUI(stringProperty) : null;
             return element ?? new PropertyField(property);
         }
 
         [CanBeNull]
-        private static VisualElement MakeGUI(SerializedProperty stringProperty, SerializedTypeAttribute attribute)
+        private VisualElement MakeGUI(SerializedProperty stringProperty)
         {
-            var types = attribute.Types ?? attribute.BaseType?.GetDerivedTypes();
+            var attr = (SerializedTypeAttribute)attribute;
+            var types = attr.SolveAllowedTypes(fieldInfo);
             if (types != null)
                 return MakeTypeDropdown(stringProperty, types);
             

@@ -1,5 +1,7 @@
-﻿using SharedUtilities.Attributes;
+﻿using System;
+using SharedUtilities.Attributes;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using SerializedType = SharedUtilities.SerializedType;
 
 namespace SharedUtilitiesPackages.SerializedTypeTests
@@ -8,11 +10,21 @@ namespace SharedUtilitiesPackages.SerializedTypeTests
     {
         [SerializeField] private KeyCode _testKey = KeyCode.Space;
         
+        [Header("String Tests")]
         [SerializedType(typeof(MonoBehaviour))] public string StringMonoBehaviour;
         [SerializedType(typeof(ScriptableObject))] public string StringScriptableObject;
         
+        [Header("Struct Tests")]
         [SerializedType(typeof(MonoBehaviour))] public SerializedType StructMonoBehaviour;
         [SerializedType(typeof(ScriptableObject))] public SerializedType StructScriptableObject;
+        
+        [Header("Filter Tests")]
+        [SerializedType(typeof(MonoBehaviour), nameof(IsTypeAllowed))] public string StringWithFilterMb;
+        [SerializedType(typeof(ScriptableObject), nameof(IsTypeAllowed))] public string StringWithFilterSo;
+        [SerializedType(typeof(Object), nameof(IsTypeAllowed))] public SerializedType StructWithFilter;
+        [SerializedType(typeof(MonoBehaviour), "Nah")] public string InvalidFilter;
+        
+        
 
         [SerializedType(typeof(MonoBehaviour))] public int AnotherType;
 
@@ -37,5 +49,7 @@ namespace SharedUtilitiesPackages.SerializedTypeTests
             Debug.Log(StructMonoBehaviour.Type + " - " + StructMonoBehaviour.AssemblyQualifiedName);
             Debug.Log(StructScriptableObject.Type + " - " + StructScriptableObject.AssemblyQualifiedName);
         }
+        
+        private static bool IsTypeAllowed(Type type) => type.Name.StartsWith('A');
     }
 }
