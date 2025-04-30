@@ -46,10 +46,15 @@ namespace SharedUtilities.Editor.SerializedTypes
             DropdownField dropdownField = new();
             dropdownField.choices.AddRange(types.Select(t => t.GetDisplayName()));
             dropdownField.index = currentIndex;
-            dropdownField.RegisterCallback<ChangeEvent<int>>(i =>
+            dropdownField.RegisterValueChangedCallback(ev =>
             {
-                if (i.newValue != i.previousValue)
-                    stringProperty.stringValue = types[i.newValue].AssemblyQualifiedName;
+                int newIndex = dropdownField.index;
+                string newName = types[newIndex].AssemblyQualifiedName;
+                if (newName != stringProperty.stringValue)
+                {
+                    stringProperty.stringValue = newName;
+                    stringProperty.serializedObject.ApplyModifiedProperties();
+                }
             });
             return dropdownField;
         }

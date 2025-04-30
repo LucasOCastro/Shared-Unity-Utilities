@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57a5744123ef4b41a2b092d32bae57de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _testKey: 32
   StringMonoBehaviour: UnityEngine.UI.Button, UnityEngine.UI, Version=1.0.0.0, Culture=neutral,
     PublicKeyToken=null
   StringScriptableObject: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem,
@@ -158,6 +159,7 @@ MonoBehaviour:
   StructScriptableObject:
     <AssemblyQualifiedName>k__BackingField: UnityEngine.Rendering.VolumeProfile,
       Unity.RenderPipelines.Core.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  AnotherType: 0
 --- !u!4 &740701487
 Transform:
   m_ObjectHideFlags: 0

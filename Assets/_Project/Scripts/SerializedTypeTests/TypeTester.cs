@@ -6,7 +6,7 @@ namespace SharedUtilitiesPackages.SerializedTypeTests
 {
     public class TypeTester : MonoBehaviour
     {
-        [SerializeField] private KeyCode _testKey;
+        [SerializeField] private KeyCode _testKey = KeyCode.Space;
         
         [SerializedType(typeof(MonoBehaviour))] public string StringMonoBehaviour;
         [SerializedType(typeof(ScriptableObject))] public string StringScriptableObject;
@@ -34,8 +34,8 @@ namespace SharedUtilitiesPackages.SerializedTypeTests
             Debug.Log(StringScriptableObject);
             
             Debug.Log("Printing struct types:");
-            Debug.Log(StructMonoBehaviour.Type);
-            Debug.Log(StructScriptableObject.Type);
+            Debug.Log(StructMonoBehaviour.Type + " - " + StructMonoBehaviour.AssemblyQualifiedName);
+            Debug.Log(StructScriptableObject.Type + " - " + StructScriptableObject.AssemblyQualifiedName);
         }
     }
 }
