@@ -1,13 +1,13 @@
 {
   "dependencies": {
     "com.lucascastro.automated-setup": {
-      "version": "file:Automated Setup",
+      "version": "file:com.lucascastro.automated-setup",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
     },
     "com.lucascastro.shared-state-machines": {
-      "version": "file:SharedStateMachines",
+      "version": "file:com.lucascastro.shared-state-machines",
       "depth": 0,
       "source": "embedded",
       "dependencies": {
@@ -15,7 +15,7 @@
       }
     },
     "com.lucascastro.shared-utilities": {
-      "version": "file:SharedUtilities",
+      "version": "file:com.lucascastro.shared-utilities",
       "depth": 0,
       "source": "embedded",
       "dependencies": {

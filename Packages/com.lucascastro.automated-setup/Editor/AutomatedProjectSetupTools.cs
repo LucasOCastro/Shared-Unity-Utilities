@@ -31,7 +31,7 @@ namespace AutomatedSetup.Editor
         {
             Packages.InstallPackages(
                 "git+https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
-                "git+https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/SharedUtilities/"
+                "git+https://github.com/LucasOCastro/Shared-Unity-Utilities.git/?path=Packages/com.lucascastro.shared-utilities/"
             );
         }
         
