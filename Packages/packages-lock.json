@@ -1,14 +1,5 @@
 {
   "dependencies": {
-    "com.browar.editor-toolbox": {
-      "version": "https://github.com/arimger/Unity-Editor-Toolbox.git#upm",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.editorcoroutines": "1.0.0"
-      },
-      "hash": "d17539a5a08e14083cf73351e88317438c0a879a"
-    },
     "com.lucascastro.automated-setup": {
       "version": "file:Automated Setup",
       "depth": 0,
