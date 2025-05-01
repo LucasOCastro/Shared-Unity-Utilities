@@ -2,13 +2,14 @@
 using JetBrains.Annotations;
 using SharedUtilities.Editor.Extensions;
 using SharedUtilities.Editor.VisualElements;
+using SharedUtilities.Serialization;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using SerializedTypeAttribute = SharedUtilities.Attributes.SerializedTypeAttribute;
+using SerializedTypeAttribute = SharedUtilities.Serialization.Attributes.SerializedTypeAttribute;
 
-namespace SharedUtilities.Editor.SerializedTypes
+namespace SharedUtilities.Editor.Serialization
 {
     [CustomPropertyDrawer(typeof(SerializedTypeAttribute))]
     internal class SerializedTypeDrawer : PropertyDrawer

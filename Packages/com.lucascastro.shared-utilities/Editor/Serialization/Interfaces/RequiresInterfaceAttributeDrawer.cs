@@ -1,8 +1,8 @@
-﻿using SharedUtilities.Interfaces;
+﻿using SharedUtilities.Serialization.Attributes;
 using UnityEditor;
 using UnityEngine;
 
-namespace SharedUtilities.Editor.Interfaces
+namespace SharedUtilities.Editor.Serialization.Interfaces
 {
     [CustomPropertyDrawer(typeof(RequiresInterfaceAttribute))]
     public class RequiresInterfaceAttributeDrawer : PropertyDrawer

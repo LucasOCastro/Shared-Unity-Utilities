@@ -1,8 +1,8 @@
 ﻿using System;
-using SharedUtilities.Attributes;
+using SharedUtilities.Serialization.Attributes;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using SerializedType = SharedUtilities.SerializedType;
+using SerializedType = SharedUtilities.Serialization.SerializedType;
 
 namespace SharedUtilitiesPackages.SerializedTypeTests
 {

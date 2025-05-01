@@ -1,7 +1,7 @@
 ﻿using SharedUtilities.Extensions;
 using UnityEngine.Serialization;
 
-namespace SharedUtilities.Attributes
+namespace SharedUtilities.Serialization.Attributes
 {
     public class FormerlySerializedAsBackingFieldForAttribute : FormerlySerializedAsAttribute
     {

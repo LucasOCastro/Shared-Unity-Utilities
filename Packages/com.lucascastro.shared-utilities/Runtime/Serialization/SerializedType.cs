@@ -2,7 +2,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace SharedUtilities
+namespace SharedUtilities.Serialization
 {
     [Serializable]
     public struct SerializedType

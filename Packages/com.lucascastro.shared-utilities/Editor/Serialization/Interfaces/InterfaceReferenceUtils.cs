@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace SharedUtilities.Editor.Interfaces
+namespace SharedUtilities.Editor.Serialization.Interfaces
 {
     internal static class InterfaceReferenceUtils
     {

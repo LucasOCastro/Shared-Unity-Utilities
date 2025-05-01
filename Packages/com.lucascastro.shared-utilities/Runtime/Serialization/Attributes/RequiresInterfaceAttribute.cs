@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SharedUtilities.Interfaces
+namespace SharedUtilities.Serialization.Attributes
 {
     public class RequiresInterfaceAttribute : PropertyAttribute
     {

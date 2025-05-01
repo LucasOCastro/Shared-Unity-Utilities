@@ -4,7 +4,7 @@ using SharedUtilities.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace SharedUtilities.Interfaces
+namespace SharedUtilities.Serialization
 {
     [Serializable]
     public class InterfaceReference<TInterface, TObject> where TInterface : class where TObject : Object

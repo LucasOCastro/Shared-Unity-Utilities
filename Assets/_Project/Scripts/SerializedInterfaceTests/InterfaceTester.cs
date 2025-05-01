@@ -1,4 +1,5 @@
-﻿using SharedUtilities.Interfaces;
+﻿using SharedUtilities.Serialization;
+using SharedUtilities.Serialization.Attributes;
 using UnityEngine;
 
 namespace SharedUtilitiesPackages.SerializedInterfaceTests

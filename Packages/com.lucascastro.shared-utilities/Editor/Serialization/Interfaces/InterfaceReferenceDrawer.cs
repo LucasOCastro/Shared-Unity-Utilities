@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using SharedUtilities.Editor.Extensions;
 using SharedUtilities.Extensions;
-using SharedUtilities.Interfaces;
+using SharedUtilities.Serialization;
 using UnityEditor;
 using UnityEngine;
 
-namespace SharedUtilities.Editor.Interfaces
+namespace SharedUtilities.Editor.Serialization.Interfaces
 {
     [CustomPropertyDrawer(typeof(InterfaceReference<,>))]
     [CustomPropertyDrawer(typeof(InterfaceReference<>))]

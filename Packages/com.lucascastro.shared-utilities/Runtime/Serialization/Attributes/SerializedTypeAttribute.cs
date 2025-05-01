@@ -4,7 +4,7 @@ using System.Reflection;
 using SharedUtilities.Extensions;
 using UnityEngine;
 
-namespace SharedUtilities.Attributes
+namespace SharedUtilities.Serialization.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class SerializedTypeAttribute : PropertyAttribute
