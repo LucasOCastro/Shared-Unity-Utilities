@@ -34,7 +34,7 @@ namespace SharedUtilities.Editor.SerializedTypes
             return null;
         }
 
-        private static VisualElement MakeTypeDropdown(SerializedProperty stringProperty, Type[] types)
+        private VisualElement MakeTypeDropdown(SerializedProperty stringProperty, Type[] types)
         {
             int currentIndex = types.FindIndex(t => t.AssemblyQualifiedName == stringProperty.stringValue);
             if (!string.IsNullOrEmpty(stringProperty.stringValue) && currentIndex == -1)
@@ -43,20 +43,28 @@ namespace SharedUtilities.Editor.SerializedTypes
                 currentIndex = -1;
                 stringProperty.stringValue = null;
             }
-            
-            DropdownField dropdownField = new();
-            dropdownField.choices.AddRange(types.Select(t => t.GetDisplayName()));
-            dropdownField.index = currentIndex;
-            dropdownField.RegisterValueChangedCallback(ev =>
+
+            var choices = types.Select(t => t.GetDisplayName()).ToList();
+            var dropdownField = new DropdownField(choices, currentIndex)
+            {
+                label = preferredLabel,
+                style = { height = EditorGUIUtility.singleLineHeight }
+            };
+            var clearButton = new Button(() => dropdownField.index = -1) { text = "X" };
+            dropdownField.RegisterValueChangedCallback(_ =>
             {
                 int newIndex = dropdownField.index;
-                string newName = types[newIndex].AssemblyQualifiedName;
+                string newName = newIndex >= 0 ? types[newIndex].AssemblyQualifiedName : null;
                 if (newName != stringProperty.stringValue)
                 {
                     stringProperty.stringValue = newName;
                     stringProperty.serializedObject.ApplyModifiedProperties();
                 }
+                
+                // clearButton.style.display = newIndex == -1 ? DisplayStyle.None : DisplayStyle.Flex;
             });
+
+            dropdownField.Add(clearButton);
             return dropdownField;
         }
 
