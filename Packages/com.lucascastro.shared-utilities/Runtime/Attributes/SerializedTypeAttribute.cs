@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using JetBrains.Annotations;
 using SharedUtilities.Extensions;
 using UnityEngine;
 
@@ -10,6 +9,8 @@ namespace SharedUtilities.Attributes
     [AttributeUsage(AttributeTargets.Field)]
     public class SerializedTypeAttribute : PropertyAttribute
     {
+        private const BindingFlags MethodBindingFlags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+
         public Type BaseType { get; }
         
         public Type[] Types { get; }
@@ -20,7 +21,19 @@ namespace SharedUtilities.Attributes
         public SerializedTypeAttribute(params Type[] types) => Types = types;
         public SerializedTypeAttribute(Type baseType, string filterMethodName) => (BaseType, FilterMethodName) = (baseType, filterMethodName);
 
-        [CanBeNull]
+        private MethodInfo GetMethod(FieldInfo fieldInfo)
+        {
+            var declaringType = fieldInfo.DeclaringType;
+            if (declaringType == null)
+                throw new NullReferenceException();
+                    
+            var method = declaringType.GetMethod(FilterMethodName, MethodBindingFlags);
+            if (method == null)
+                throw new MissingMethodException(declaringType.Name, FilterMethodName);
+            
+            return method;
+        }
+
         public Type[] SolveAllowedTypes(FieldInfo fieldInfo)
         {
             if (Types != null) 
@@ -32,15 +45,8 @@ namespace SharedUtilities.Attributes
             var types = BaseType.GetDerivedTypes();
             if (FilterMethodName == null) 
                 return types;
-            
-            var method = fieldInfo.DeclaringType?.GetMethod(FilterMethodName,
-                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
-            if (method == null)
-            {
-                Debug.LogError($"Could not find static method {FilterMethodName} on {fieldInfo.DeclaringType?.Name}");
-                return null;
-            }
-            
+
+            var method = GetMethod(fieldInfo);
             object[] methodParams = new object[1];
             return types.Where(t =>
             {

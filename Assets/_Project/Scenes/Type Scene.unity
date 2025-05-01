@@ -154,11 +154,19 @@ MonoBehaviour:
   StringScriptableObject: UnityEngine.InputSystem.InputActionAsset, Unity.InputSystem,
     Version=1.11.2.0, Culture=neutral, PublicKeyToken=null
   StructMonoBehaviour:
-    <AssemblyQualifiedName>k__BackingField: UnityEngine.Rendering.Volume, Unity.RenderPipelines.Core.Runtime,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    <AssemblyQualifiedName>k__BackingField: UnityEngine.Rendering.UI.DebugUIHandlerEnumField,
+      Unity.RenderPipelines.Core.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
   StructScriptableObject:
     <AssemblyQualifiedName>k__BackingField: UnityEngine.Rendering.VolumeProfile,
       Unity.RenderPipelines.Core.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  StringWithFilterMb: UnityEngine.UI.AspectRatioFitter, UnityEngine.UI, Version=1.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  StringWithFilterSo: UnityEngine.Timeline.ActivationTrack, Unity.Timeline, Version=1.0.0.0,
+    Culture=neutral, PublicKeyToken=null
+  StructWithFilter:
+    <AssemblyQualifiedName>k__BackingField: UnityEngine.Timeline.ActivationTrack,
+      Unity.Timeline, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  InvalidFilter: 
   AnotherType: 0
 --- !u!4 &740701487
 Transform:
