@@ -109,3 +109,5 @@ Assets/Content/Addressables/link.xml.meta
 Assets/DefaultPrefabObjects.asset
 Assets/AddressableAssetsData/link.xml
 Assets/AddressableAssetsData/link.xml.meta
+
+*.cs~
