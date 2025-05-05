@@ -4,6 +4,7 @@ using SharedUtilities.Extensions;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
 namespace SharedUtilities.Editor.Extensions
@@ -21,6 +22,8 @@ namespace SharedUtilities.Editor.Extensions
         
         public static IEnumerable<VisualElement> GetFieldSubElements(this SerializedProperty property, bool bind = false)
         {
+            Assert.IsNotNull(property);
+            
             object obj = property.managedReferenceValue;
             if (obj is Object o)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SharedUtilities.Editor.Extensions;
 using SharedUtilities.Extensions;
 using SharedUtilities.StateMachines.Editor.Graph;
 using SharedUtilities.VisualElements;
@@ -50,7 +51,8 @@ namespace SharedUtilities.StateMachines.Editor
         private void BindItem(VisualElement item, int index)
         {
             var asset = Edge.Assets[index];
-            var subElements = GetFieldSubElements(asset.transition, nameof(asset.transition), asset).ToList();
+            var sp = new SerializedObject(asset).FindProperty(nameof(asset.transition));
+            List<VisualElement> subElements = sp.GetFieldSubElements().ToList();
             
             // TODO make label and foldout text editable
             if (subElements.Count == 0)
@@ -138,24 +140,6 @@ namespace SharedUtilities.StateMachines.Editor
                 options[i] = new(types[i].GetDisplayName());
 
             return types;
-        }
-
-        private static IEnumerable<VisualElement> GetFieldSubElements(object obj, string name, Object parent)
-        {
-            if (obj is Object o)
-            {
-                yield return new InspectorElement(o);
-                yield break;
-            }
-            
-            var so = new SerializedObject(parent);
-            var prop = so.FindProperty(name);
-            while (prop.NextVisible(true))
-            {
-                var field = new PropertyField(prop.Copy());
-                field.Bind(so);
-                yield return field;
-            }
         }
         
         private static string GenerateNameForTransition(TransitionAsset asset)

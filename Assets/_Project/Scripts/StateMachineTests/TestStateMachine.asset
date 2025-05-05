@@ -1,6 +1,32 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-9218587042515168529
+--- !u!114 &-6950167609781035173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed2037574be8461b9c459595b52a7908, type: 3}
+  m_Name: BaseTransition<MyStateBase> (LogState -> LogState)
+  m_EditorClassIdentifier: 
+  from: {fileID: -3065431541310662155}
+  to: {fileID: -2350088565486536484}
+  transitionType: SharedUtilities.StateMachines.BaseTransition`1[[SharedUtilitiesPackages.Game.MyStateBase,
+    Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], SharedUtilities.StateMachines,
+    Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+  transition:
+    rid: 1113061033447522401
+  references:
+    version: 2
+    RefIds:
+    - rid: 1113061033447522401
+      type: {class: 'BaseTransition`1[[SharedUtilitiesPackages.Game.MyStateBase, Assembly-CSharp]]', ns: SharedUtilities.StateMachines, asm: SharedUtilities.StateMachines}
+      data:
+        test: 
+--- !u!114 &-3065431541310662155
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -13,19 +39,17 @@ MonoBehaviour:
   m_Name: LogState
   m_EditorClassIdentifier: 
   state:
-    rid: 2028028348442607693
-  position: {x: 404, y: 233.6}
+    rid: 1113061033447522399
+  position: {x: 128.00002, y: 93.60001}
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607693
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
+    - rid: 1113061033447522399
+      type: {class: LogState, ns: SharedUtilitiesPackages.Game, asm: Assembly-CSharp}
       data:
         <Name>k__BackingField: 
         message: 
---- !u!114 &-7354765555248312555
+--- !u!114 &-2350088565486536484
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -38,15 +62,13 @@ MonoBehaviour:
   m_Name: LogState
   m_EditorClassIdentifier: 
   state:
-    rid: 2028028348442607695
-  position: {x: 62.92804, y: 425.48804}
+    rid: 1113061033447522400
+  position: {x: 355.2, y: 118.4}
   references:
     version: 2
     RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607695
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
+    - rid: 1113061033447522400
+      type: {class: LogState, ns: SharedUtilitiesPackages.Game, asm: Assembly-CSharp}
       data:
         <Name>k__BackingField: 
         message: 
@@ -63,216 +85,9 @@ MonoBehaviour:
   m_Name: TestStateMachine
   m_EditorClassIdentifier: 
   anyNodePosition: {x: 0, y: 0}
-  initialState: {fileID: 7058554584658388757}
+  initialState: {fileID: -3065431541310662155}
   states:
-  - {fileID: 7058554584658388757}
-  - {fileID: 4872594910071434880}
-  - {fileID: 7064309018846374034}
-  - {fileID: 8478248033057560098}
-  - {fileID: -9218587042515168529}
-  - {fileID: 8853208470328571288}
-  - {fileID: -7354765555248312555}
-  - {fileID: 96625512692073132}
-  - {fileID: 7964796617501996661}
-  - {fileID: 4949111685294130002}
-  transitions: []
---- !u!114 &96625512692073132
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607696
-  position: {x: 6.3999634, y: 115.200005}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607696
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &4872594910071434880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607690
-  position: {x: 212, y: 205}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607690
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &4949111685294130002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028707034103881
-  position: {x: 552.8, y: 110.4}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028707034103881
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &7058554584658388757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607689
-  position: {x: -0.8000183, y: 257.6}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607689
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &7064309018846374034
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607691
-  position: {x: 233.60004, y: 406.4}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607691
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &7964796617501996661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607697
-  position: {x: 6.432007, y: 381.6}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607697
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &8478248033057560098
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607692
-  position: {x: 202.40004, y: 293.6}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607692
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
---- !u!114 &8853208470328571288
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64d39e84de8d4c21b6cab1880b186b45, type: 3}
-  m_Name: LogState
-  m_EditorClassIdentifier: 
-  state:
-    rid: 2028028348442607694
-  position: {x: 183.19997, y: 88.8}
-  references:
-    version: 2
-    RefIds:
-    - rid: -2
-      type: {class: , ns: , asm: }
-    - rid: 2028028348442607694
-      type: {class: LogState, ns: SpaceWizardry.Game, asm: Assembly-CSharp}
-      data:
-        <Name>k__BackingField: 
-        message: 
+  - {fileID: -3065431541310662155}
+  - {fileID: -2350088565486536484}
+  transitions:
+  - {fileID: -6950167609781035173}
