@@ -35,7 +35,7 @@ namespace SharedUtilities.Editor.Tools
 
         private void CreateGUI()
         {
-            var root = rootVisualElement; 
+            var root = rootVisualElement;
             
             root.Add(new Label("Hidden Objects")
             {

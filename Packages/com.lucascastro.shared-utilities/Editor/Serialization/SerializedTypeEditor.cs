@@ -66,9 +66,7 @@ namespace SharedUtilities.Editor.Serialization
             return null;
         }
 
-        private static void LogError(string message, SerializedProperty property) => Debug.LogError(
-            $"[{nameof(SerializedTypeAttribute)}] {message} ({property.serializedObject.targetObject.GetType().Name}.{property.propertyPath})",
-            property.serializedObject.targetObject
-        );
+        private static void LogError(string message, SerializedProperty property) =>
+            AttributeDrawerUtils.LogAttributeDrawerError<SerializedTypeAttribute>(message, property);
     }
 }
