@@ -12,7 +12,7 @@ namespace SharedUtilities.Editor.VisualElements
     {
         public SerializedProperty Property { get; }
         
-        private readonly TypeDropdown _typeDropdown;
+        public TypeDropdown TypeDropdown { get; }
         private readonly Foldout _labelFoldout;
         private readonly VisualElement _emptyElement;
         private readonly Type[] _types;
@@ -22,8 +22,8 @@ namespace SharedUtilities.Editor.VisualElements
             Property = property;
             _types = allowedTypes;
             
-            _typeDropdown = new(allowedTypes);
-            _typeDropdown.RegisterValueChangedCallback(_ => RefreshTypeValue());
+            TypeDropdown = new(allowedTypes);
+            TypeDropdown.RegisterValueChangedCallback(_ => RefreshTypeValue());
             
             _labelFoldout = new()
             {
@@ -39,11 +39,11 @@ namespace SharedUtilities.Editor.VisualElements
             };
             
             Add(_labelFoldout);
-            GetTypePickerContainer(_labelFoldout).Add(_typeDropdown);
+            GetTypePickerContainer(_labelFoldout).Add(TypeDropdown);
 
             object value = Property.managedReferenceValue;
             int index = value != null ? _types.IndexOf(value.GetType()) : -1;
-            _typeDropdown.index = index;
+            TypeDropdown.index = index;
             FillFields();
         }
 
@@ -51,8 +51,8 @@ namespace SharedUtilities.Editor.VisualElements
         {
             object oldValue = Property.managedReferenceValue;
             int oldIndex = _types.IndexOf(oldValue?.GetType());
-            int newIndex = _typeDropdown.index;
-            if (_typeDropdown.index == oldIndex)
+            int newIndex = TypeDropdown.index;
+            if (TypeDropdown.index == oldIndex)
                 return;
             
             object newValue = newIndex >= 0 ? Activator.CreateInstance(_types[newIndex]) : null;

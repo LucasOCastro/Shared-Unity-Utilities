@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using SharedUtilities.Editor.VisualElements;
 using SharedUtilities.Extensions;
 using SharedUtilities.Serialization;
+using SharedUtilities.Serialization.Attributes;
 using UnityEditor;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
@@ -13,33 +14,53 @@ namespace SharedUtilities.Editor.Serialization
     [CustomPropertyDrawer(typeof(TypePickerAttribute))]
     public class TypePickerAttributeDrawer : PropertyDrawer
     {
+        private TypePickerAttribute Attribute => (TypePickerAttribute)attribute;
+        
         [CanBeNull]
         public override VisualElement CreatePropertyGUI(SerializedProperty property)
         {
             var types = GetAllowedTypes();
-            if (PropertyHasValidType(property, types)) 
-                return new ObjectPropertyFieldWithTypePicker(property, types);
-            
-            LogError($"Type {property.managedReferenceValue.GetType().Name} is not allowed.", property);
-            property.managedReferenceValue = null;
-            property.serializedObject.ApplyModifiedProperties();
-            return null;
+            if (!PropertyHasValidType(property, types))
+            {
+                property.managedReferenceValue = GetDefaultValue(property, types);
+                property.serializedObject.ApplyModifiedProperties();
+            }
 
+            return new ObjectPropertyFieldWithTypePicker(property, types)
+            {
+                TypeDropdown = { ShowClearButton = Attribute.AllowNull }
+            };
         }
 
-        private static bool PropertyHasValidType(SerializedProperty property, Type[] types)
+        private bool PropertyHasValidType(SerializedProperty property, Type[] types)
         {
             if (property.managedReferenceValue == null)
-                return true;
+                return Attribute.AllowNull;
             
             int existingIndex = types.IndexOf(property.managedReferenceValue.GetType());
-            return existingIndex >= 0;
+            if (existingIndex >= 0) 
+                return true;
+            
+            LogError($"Type {property.managedReferenceValue.GetType().Name} is not allowed.", property);
+            return false;
         }
+
+        private object GetDefaultValue(SerializedProperty property, Type[] types)
+        {
+            if (Attribute.AllowNull) 
+                return null;
+
+            if (types.Length > 0) 
+                return Activator.CreateInstance(types[0]);
+            
+            LogError("Null is not allowed but no valid types were found.", property);
+            return null;
+        }
+        
         
         private Type[] GetAllowedTypes()
         {
-            var attr = (TypePickerAttribute)attribute;
-            return (attr.AllowedTypes ?? fieldInfo.FieldType.GetDerivedTypes())
+            return (Attribute.AllowedTypes ?? fieldInfo.FieldType.GetDerivedTypes())
                 .Where(t => !t.IsAbstract && 
                             !t.IsGenericTypeDefinition && 
                             t.HasDefaultConstructor() &&

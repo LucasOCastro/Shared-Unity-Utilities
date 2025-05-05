@@ -154,6 +154,16 @@ MonoBehaviour:
     rid: 1113061033447522397
   Limited:
     rid: -2
+  Empty:
+    rid: -2
+  NoNull:
+    rid: 1113061037956923394
+  NoNullEmpty:
+    rid: -2
+  WrongStart:
+    rid: -2
+  WrongStartNoNull:
+    rid: 1113061037956923395
   references:
     version: 2
     RefIds:
@@ -170,6 +180,16 @@ MonoBehaviour:
       data:
         BaseClassA: 5
         DerivedClassA: 0
+    - rid: 1113061037956923394
+      type: {class: BaseClass, ns: SharedUtilitiesPackages.TypePickerTests, asm: Assembly-CSharp}
+      data:
+        BaseClassA: 0
+    - rid: 1113061037956923395
+      type: {class: AbstractDerivedClass2, ns: SharedUtilitiesPackages.TypePickerTests, asm: Assembly-CSharp}
+      data:
+        BaseClassA: 0
+        AbstractDerivedClassA: 0
+        AbstractDerivedClass2A: 0
 --- !u!4 &662362376
 Transform:
   m_ObjectHideFlags: 0

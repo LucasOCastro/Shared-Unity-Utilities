@@ -1,11 +1,13 @@
 ﻿using System;
 using UnityEngine;
 
-namespace SharedUtilities.Serialization
+namespace SharedUtilities.Serialization.Attributes
 {
     public class TypePickerAttribute : PropertyAttribute 
     {
-        public Type[] AllowedTypes { get; set; }
+        public Type[] AllowedTypes { get; }
+
+        public bool AllowNull { get; set; } = true;
         
         public TypePickerAttribute() {}
         

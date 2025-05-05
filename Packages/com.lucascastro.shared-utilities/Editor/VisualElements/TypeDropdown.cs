@@ -13,6 +13,12 @@ namespace SharedUtilities.Editor.VisualElements
         public Type[] Types { get; }
         public Button ClearButton { get; }
 
+        public bool ShowClearButton
+        {
+            get => ClearButton.visible;
+            set => ClearButton.visible = value;
+        }
+
         public TypeDropdown(Type[] types, SerializedProperty stringProperty) : 
             this(types, GetPropValueIndex(types, stringProperty))
         {
