@@ -215,5 +215,7 @@ namespace SharedUtilities.Extensions
             _derivedTypes[baseType] = types;
             return types;
         }
+        
+        public static bool HasDefaultConstructor(this Type type) => type.GetConstructor(Type.EmptyTypes) != null;
     }
 } 
