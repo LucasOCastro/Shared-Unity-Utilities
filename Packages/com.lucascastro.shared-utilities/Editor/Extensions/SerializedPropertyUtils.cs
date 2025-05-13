@@ -20,25 +20,31 @@ namespace SharedUtilities.Editor.Extensions
             return property.FindPropertyRelative(backingFieldName);
         }
         
+        // https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/UIElements/Controls/PropertyField.cs
         public static IEnumerable<VisualElement> GetFieldSubElements(this SerializedProperty property, bool bind = false)
         {
             Assert.IsNotNull(property);
             
-            object obj = property.managedReferenceValue;
-            if (obj is Object o)
+            var endProperty = property.GetEndProperty();
+            property.NextVisible(true); // Expand the first child.
+            do
             {
-                yield return new InspectorElement(o);
-                yield break;
-            }
-            
-            var prop = property.Copy();
-            while (prop.NextVisible(true) && prop.depth > property.depth)
-            {
-                var field = new PropertyField(prop.Copy());
+                if (SerializedProperty.EqualContents(property, endProperty))
+                    break;
+
+                string propPath = property.propertyPath;
+                var field = new PropertyField(property)
+                {
+                    bindingPath = propPath,
+                    name = "unity-property-field-" + propPath
+                };
+
                 if (bind)
-                    field.BindProperty(prop);
+                    field.Bind(property.serializedObject);
+
                 yield return field;
             }
+            while (property.NextVisible(false)); // Never expand children.
         }
     }
 }

@@ -11,7 +11,8 @@
       "depth": 0,
       "source": "embedded",
       "dependencies": {
-        "com.unity.editorcoroutines": "1.0.0"
+        "com.unity.editorcoroutines": "1.0.0",
+        "com.lucascastro.shared-utilities": "1.2.5"
       }
     },
     "com.lucascastro.shared-utilities": {

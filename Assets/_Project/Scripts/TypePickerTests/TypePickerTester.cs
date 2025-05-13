@@ -15,6 +15,7 @@ namespace SharedUtilitiesPackages.TypePickerTests
     public class DerivedClass : BaseClass
     {
         public int DerivedClassA;
+        public Vector3 Vector;
     }
 
     [Serializable]
