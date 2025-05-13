@@ -1,6 +1,6 @@
 {
   "name": "com.lucascastro.shared-utilities",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "displayName": "Shared Utilities",
   "description": "General utility functions, editors, extensions, etc.",
   "dependencies": {
