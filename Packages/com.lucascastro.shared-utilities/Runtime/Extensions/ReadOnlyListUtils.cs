@@ -40,5 +40,13 @@ namespace SharedUtilities.Extensions
             
             return -1;
         }
+        
+        public static T2[] MapToArray<T1, T2>(this IReadOnlyList<T1> array, Func<T1, T2> converter)
+        {
+            var result = new T2[array.Count];
+            for (int i = 0; i < array.Count; i++) 
+                result[i] = converter(array[i]);
+            return result;
+        }
     }
 }
